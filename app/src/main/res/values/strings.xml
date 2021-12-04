@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">OnTrack</string>
+    <string name="server_base">http://192.168.1.2/travelhelperbackend/api/</string>
+    <string name="server_base2">http://celllocator.somee.com/Ontrack/api/</string>
+    <string name="login_wrongData">Неправильный логин или пароль. Проверьте правильность введённых данных.</string>
+    <string name="login_error">Ошибка доступа к серверу. Возможно, сервер недоступен или у вас нет доступа к интернету.</string>
+    <string name="internal_error">Произошла ошибка. Мы уже работаем над её исправлением!</string>
+    <string name="email_tip">Ваш Email</string>
+    <string name="password_tip">Ваш пароль</string>
+    <string name="username_tip">Ваш username</string>
+    <string name="loginButton_label">Войти</string>
+    <string name="searchPlace_tip">Найти место для путешествия</string>
+    <string name="main_bottomMenu">Главная</string>
+    <string name="trip_bottomMenu">Поездки</string>
+    <string name="favorites_bottomMenu">Избранное</string>
+    <string name="profile_bottomMenu">Профиль</string>
+    <string name="main_upperTest">Создавайте поездки, делитесь ими с друзьями и присоединяйтесь по коду доступа!</string>
+    <string name="createTrip_label">Создать поездку</string>
+    <string name="joinTrip_label">Присоединиться к поездке</string>
+    <string name="Ekaterinburg_label">Екатеринбург</string>
+    <string name="Kaliningrad_label">Калининград</string>
+    <string name="Moscow_label">Москва</string>
+    <string name="Kazan_label">Казань</string>
+    <string name="Sochi_label">Сочи</string>
+    <string name="StPetersburg_label">Санкт-Петербург</string>
+    <string name="create_section">Создать</string>
+    <string name="create_section_description">Создайте поездку и храните все важные планы в одном месте</string>
+    <string name="join_section">Присоединиться</string>
+    <string name="join_section_description">Уже есть код доступа?</string>
+    <string name="join_section_description2">Присоединяйтесь к поездке и планируйте путешествие вместе!</string>
+    <string name="accessCode_input">Ввести код</string>
+    <string name="tripName_input">Название</string>
+    <string name="tripCity_input">Город</string>
+    <string name="tripDates_input">Даты поездки</string>
+    <string name="search_hint">Найти место для путешествия</string>
+    <string name="noAccount_label">Войдите в систему, чтобы открыть все возможности OnTrack</string>
+    <string name="signIn_label">Войти в аккаунт</string>
+    <string name="createAccount_label">Создать аккаунт</string>
+    <string name="register_label">Зарегистрироваться</string>
+    <string name="showAll_label"><u>Показать все</u></string>
+    <string name="placeLoading_label">Место загружается строка 2</string>
+    <string name="loadingDummy_label">Загрузка...</string>
+    <string name="placeLoadingAdress_label">Место загружается адрес 2</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

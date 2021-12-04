@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    android:verticalScrollbarPosition="right"
+    tools:context=".MainFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <SearchView
+                android:id="@+id/search_places"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/black"
+                android:queryHint="@string/search_hint">
+
+            </SearchView>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="-50dp"
+                android:clickable="true"
+                android:src="@android:drawable/ic_input_add" />
+
+            <ImageButton
+                android:id="@+id/ekbButton"
+                android:layout_width="wrap_content"
+                android:layout_height="258dp"
+                android:scaleType="center"
+                android:src="@drawable/ekb" />
+
+            <ImageButton
+                android:id="@+id/klnButton"
+                android:layout_width="wrap_content"
+                android:layout_height="272dp"
+                android:scaleType="center"
+                android:src="@drawable/kln" />
+
+            <ImageButton
+                android:id="@+id/mskButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:src="@drawable/msk" />
+
+            <ImageButton
+                android:id="@+id/kznButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:src="@drawable/kzn" />
+
+            <ImageButton
+                android:id="@+id/sochiButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:src="@drawable/sci" />
+
+            <ImageButton
+                android:id="@+id/spbButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:src="@drawable/spb" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

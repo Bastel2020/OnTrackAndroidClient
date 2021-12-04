@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/tripsFragment"
+        android:name="com.bastel2020.ontrack.tripsFragment"
+        android:label="fragment_trips"
+        tools:layout="@layout/fragment_trips" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.bastel2020.ontrack.favoritesFragment"
+        android:label="fragment_favorites"
+        tools:layout="@layout/fragment_favorites" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.bastel2020.ontrack.profileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.bastel2020.ontrack.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" />
+    <fragment
+        android:id="@+id/cityFragment"
+        android:name="com.bastel2020.ontrack.CityFragment"
+        android:label="fragment_"
+        tools:layout="@layout/fragment_city" />
+    <fragment
+        android:id="@+id/placeCategoryFragment"
+        android:name="com.bastel2020.ontrack.PlaceCategoryFragment"
+        android:label="fragment_place_category"
+        tools:layout="@layout/fragment_place_category" />
+    <fragment
+        android:id="@+id/placeFragment"
+        android:name="com.bastel2020.ontrack.PlaceFragment"
+        android:label="fragment_place"
+        tools:layout="@layout/fragment_place" />
+    <fragment
+        android:id="@+id/noAccountFragment"
+        android:name="com.bastel2020.ontrack.NoAccountFragment"
+        android:label="fragment_no_account"
+        tools:layout="@layout/fragment_no_account" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.bastel2020.ontrack.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.bastel2020.ontrack.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
+</navigation>
