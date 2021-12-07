@@ -3,7 +3,7 @@
     <string name="server_base">http://192.168.1.2/travelhelperbackend/api/</string>
     <string name="server_base2">http://celllocator.somee.com/Ontrack/api/</string>
     <string name="login_wrongData">Неправильный логин или пароль. Проверьте правильность введённых данных.</string>
-    <string name="login_error">Ошибка доступа к серверу. Возможно, сервер недоступен или у вас нет доступа к интернету.</string>
+    <string name="login_error">Ошибка доступа к серверу. Возможно, сервер недоступен или у вас нет доступа в интернет.</string>
     <string name="internal_error">Произошла ошибка. Мы уже работаем над её исправлением!</string>
     <string name="email_tip">Ваш Email</string>
     <string name="password_tip">Ваш пароль</string>
@@ -41,6 +41,9 @@
     <string name="placeLoading_label">Место загружается строка 2</string>
     <string name="loadingDummy_label">Загрузка...</string>
     <string name="placeLoadingAdress_label">Место загружается адрес 2</string>
+    <string name="address_label">Адрес:</string>
+    <string name="workingHours_label">Режим работы:</string>
+    <string name="addToTrip_button">Добавить в поездку</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

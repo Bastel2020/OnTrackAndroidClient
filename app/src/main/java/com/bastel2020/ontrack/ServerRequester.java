@@ -32,7 +32,6 @@ public class ServerRequester {
             .build();
     private static Server service = retrofit.create(Server.class);
     private static boolean loginResult;
-    private static int CurrentCityId;
 
     public static void LoginUser(Context context, String email, String password) {
         JSONObject postData = new JSONObject();
@@ -135,12 +134,39 @@ public class ServerRequester {
                 else
                 {
                     Log.e(TAG, "Can't get city places on Id: " + cityId + ". Error code: " + response.code());
+                    Toast.makeText(context, context.getText(R.string.login_error), Toast.LENGTH_LONG);
                 }
             }
 
             @Override
             public void onFailure(Call<List<PlaceCategoryShortInfo>> call, Throwable t) {
                 Log.e(TAG, "Can't get city places on Id: " + cityId + ". Error while send request: " + t.getMessage());
+                Toast.makeText(context, context.getText(R.string.internal_error ), Toast.LENGTH_LONG);
+            }
+        });
+    }
+
+    public static void GetCategoryPlaces(Context context, int cityId, int categoryId)
+    {
+        Call<PlaceShortInfo[]> call = service.GetPlacesByCategory(cityId, categoryId);
+        call.enqueue(new Callback<PlaceShortInfo[]>() {
+            @Override
+            public void onResponse(Call<PlaceShortInfo[]> call, Response<PlaceShortInfo[]> response) {
+                if (response.isSuccessful())
+                {
+                    PlaceCategoryFragment.UpdateEntities(response.body());
+                }
+                else
+                {
+                    Log.e(TAG, "Can't get category places on Id: " + cityId + ". Error code: " + response.code());
+                    Toast.makeText(context, context.getText(R.string.login_error), Toast.LENGTH_LONG);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlaceShortInfo[]> call, Throwable t) {
+                Log.e(TAG, "Can't get category places on Id: " + cityId + ". Error while send request: " + t.getMessage());
+                Toast.makeText(context, context.getText(R.string.internal_error ), Toast.LENGTH_LONG);
             }
         });
     }
@@ -243,6 +269,8 @@ public class ServerRequester {
         Call<TokenCheck> CheckToken(@Header("Authorization") String token);
         @GET("cities/{id}/placesShort")
         Call<List<PlaceCategoryShortInfo>> GetCityPlaces(@Path("id") int id);
+        @GET("cities/{id}/placesByCategory/{categoryId}")
+        Call<PlaceShortInfo[]> GetPlacesByCategory(@Path("id") int id, @Path("categoryId") int categoryId);
     }
 }
 

@@ -92,7 +92,7 @@ public class favoritesFragment extends Fragment {
         RecyclerView recyclerView = v.findViewById(R.id.testRecycle);
         LinearLayoutManager horizontalManager = new LinearLayoutManager(v.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(horizontalManager);
-        testAdapter = new PlaceCategoryRecyclerAdapter(v.getContext(), categories, allPlaces, allAddresses);
+        testAdapter = new PlaceCategoryRecyclerAdapter(v.getContext(), 1, categories, allPlaces, allAddresses);
         recyclerView.setAdapter(testAdapter);
         return v;
     }

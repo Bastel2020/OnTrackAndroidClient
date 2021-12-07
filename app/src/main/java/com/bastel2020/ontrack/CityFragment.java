@@ -13,18 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CityFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class CityFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private int cityId;
+    private static int cityId;
     private static PlaceCategoryRecyclerAdapter testAdapter;
     private static View view;
 
@@ -37,15 +31,6 @@ public class CityFragment extends Fragment {
         this.cityId = cityId;
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static CityFragment newInstance(String param1, String param2) {
-        CityFragment fragment = new CityFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,7 +72,7 @@ public class CityFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.cityPlaces_recycle);
         LinearLayoutManager horizontalManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(horizontalManager);
-        testAdapter = new PlaceCategoryRecyclerAdapter(view.getContext(), categories, placesNames, placesTextAddresses);
+        testAdapter = new PlaceCategoryRecyclerAdapter(view.getContext(), cityId, categories, placesNames, placesTextAddresses);
         recyclerView.setAdapter(testAdapter);
 
         ProgressBar progressBar = view.findViewById(R.id.cityFragment_progressBar);
