@@ -50,16 +50,22 @@ public class PlaceCategoryFragment extends Fragment {
     {
         ArrayList<String> placesNames = new ArrayList<String>();
         ArrayList<String> placesTextAddresses = new ArrayList<String>();
+        int[] placesIds = new int[data.length];
+
+        int counter = 0;
         for (ServerRequester.PlaceShortInfo itVar: data
         ) {
             placesNames.add(itVar.Name);
             placesTextAddresses.add(itVar.TextLocation);
+            placesIds[counter] = itVar.Id;
+
+            counter++;
         }
 
         RecyclerView recyclerView = view.findViewById(R.id.placeCategory_reycle);
         LinearLayoutManager verticalManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(verticalManager);
-        testAdapter = new PlacesBigRecyclerAdapter(view.getContext(), placesNames, placesTextAddresses);
+        testAdapter = new PlacesBigRecyclerAdapter(view.getContext(), placesNames, placesTextAddresses, placesIds);
         recyclerView.setAdapter(testAdapter);
 
         ProgressBar progressBar = view.findViewById(R.id.placeCategory_progressBar);

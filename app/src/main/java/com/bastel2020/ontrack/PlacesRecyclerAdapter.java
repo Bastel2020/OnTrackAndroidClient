@@ -5,9 +5,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -19,12 +23,14 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
     private LayoutInflater mInflater;
     private List<String> placeNames;
     private List<String> placeAddresses;
+    private int[] placeIds;
     private ItemClickListener mClickListener;
-    PlacesRecyclerAdapter(Context context, List<String> placeNames, List<String> placeAddresses)
+    PlacesRecyclerAdapter(Context context, List<String> placeNames, List<String> placeAddresses, int[] placeIds)
     {
         mInflater = LayoutInflater.from(context);
         this.placeNames = placeNames;
         this.placeAddresses = placeAddresses;
+        this.placeIds = placeIds;
     }
 
 
@@ -45,6 +51,18 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
         String placeAddress = placeAddresses.get(position);
         holder.nameField.setText(placeName);
         holder.placeAddressField.setText(placeAddress);
+
+        if (FavoritesLogic.ContainsPlace(placeIds[position]))
+            holder.favoritesButton.setBackgroundResource(R.drawable.favorite_checked);
+        else
+            holder.favoritesButton.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24);
+
+        holder.favoritesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FavoritesLogic.ChangeFavoritesButtonState(v.getContext(), holder.favoritesButton, placeIds[position], placeNames.get(position), placeAddresses.get(position));
+            }
+        });
     }
 
     @Override
@@ -54,11 +72,31 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView nameField, placeAddressField;
+        ImageButton placePicture, favoritesButton;
 
         ViewHolder(View itemView) {
             super(itemView);
             nameField = itemView.findViewById(R.id.placeName_label);
             placeAddressField = itemView.findViewById(R.id.placeAdress_label);
+            placePicture = itemView.findViewById(R.id.placeImage_button);
+            favoritesButton = itemView.findViewById(R.id.AddPlaceToFavsSmall_button);
+
+
+            ItemClickListener goToPlaceItemClick = new ItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    loadFragment(PlaceFragment.newInstance(placeNames.get(position), placeIds[position]), (AppCompatActivity)view.getContext());
+                }
+            };
+
+            placePicture.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    loadFragment(PlaceFragment.newInstance(placeNames.get(getAdapterPosition()), placeIds[getAdapterPosition()]), (AppCompatActivity)v.getContext());
+                }
+            });
+            mClickListener = goToPlaceItemClick;
+
             itemView.setOnClickListener(this);
         }
 
@@ -76,6 +114,14 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
             mClickListener = itemClickListener;
         }
 
+    }
+
+    public void loadFragment(Fragment fragment, AppCompatActivity activity) {
+        // load fragment
+        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.default_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     // parent activity will implement this method to respond to click events

@@ -2,6 +2,7 @@ package com.bastel2020.ontrack;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.annotations.SerializedName;
@@ -21,6 +22,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 import static android.content.ContentValues.TAG;
 
@@ -103,7 +105,7 @@ public class ServerRequester {
             public final void onResponse(Call<TokenCheck> call, Response<TokenCheck> response) {
                 if (response.isSuccessful()) {
                     ServerRequester.loginResult = true;
-                    Log.e(TAG, "Token check success");
+                    Log.i(TAG, "Token check success");
                 }
                 else
                 {
@@ -171,6 +173,80 @@ public class ServerRequester {
         });
     }
 
+    public static void GetPlaceInfo(View v, int placeId)
+    {
+        Call<PlaceInfo> call = service.GetPlaceInfo(placeId);
+        call.enqueue(new Callback<PlaceInfo>() {
+            @Override
+            public void onResponse(Call<PlaceInfo> call, Response<PlaceInfo> response) {
+                if (response.isSuccessful())
+                {
+                    PlaceFragment.UpdateEntities(v, response.body());
+                }
+                else
+                {
+                    Log.e(TAG, "Can't get place info on Id: " + placeId + ". Error code: " + response.code());
+                    Toast.makeText(v.getContext(), v.getContext().getText(R.string.login_error), Toast.LENGTH_LONG);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlaceInfo> call, Throwable t) {
+                Log.e(TAG, "Can't get place info on Id: " + placeId + ". Error while send request: " + t.getMessage());
+                Toast.makeText(v.getContext(), v.getContext().getText(R.string.internal_error ), Toast.LENGTH_LONG);
+            }
+        });
+    }
+
+    public static void ChangeFavoriteState(Context context, int placeId)
+    {
+        DbContext db = new DbContext(context);
+        String token = db.GetToken();
+        Call<Boolean> call = service.ChangeFavoritesState("Bearer " + token, placeId);
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (!response.isSuccessful() || (Boolean) response.body() == false)
+                {
+                    Log.e(TAG, "can't change favorite state on Server! Status code: " + response.code());
+                }
+                else
+                {
+                    Log.i(TAG, "favorites state changed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Log.e(TAG, "can't change favorite state on Server! Error while making request. " + t.getMessage());
+            }
+        });
+    }
+
+    public static void SyncFavorites(Context context)
+    {
+        Log.i(TAG, "favorites sync is started");
+        DbContext db = new DbContext(context);
+        String token = db.GetToken();
+        Call<List<PlaceInfo>> call = service.GetFavoritesFromServer("Bearer " + token);
+        call.enqueue(new Callback<List<PlaceInfo>>() {
+            @Override
+            public void onResponse(Call<List<PlaceInfo>> call, Response<List<PlaceInfo>> response) {
+                if(response.isSuccessful())
+                {
+                    FavoritesLogic.SyncFavorites(response.body());
+                    Log.i(TAG, "favorites are synchronized");
+                }
+                else { Log.e(TAG, "Sync favorites failed! Status code: " + response.code()); }
+            }
+
+            @Override
+            public void onFailure(Call<List<PlaceInfo>> call, Throwable t) {
+                Log.e(TAG, "Sync favorites failed! Error: " + t.getMessage());
+            }
+        });
+    }
+
     public static class loginResult
     {
         @SerializedName("access_token")
@@ -225,6 +301,32 @@ public class ServerRequester {
         public String MainPhotoUrl;
     }
 
+    public static class PlaceInfo
+    {
+        @SerializedName("id")
+        public int Id;
+        @SerializedName("name")
+        public String Name;
+        @SerializedName("description")
+        public String Description;
+        @SerializedName("placeSite")
+        public String PlaceSite;
+        @SerializedName("enterCost")
+        public String EnterCost;
+        @SerializedName("textLocation")
+        public String TextLocation;
+        @SerializedName("mainPhotoUrl")
+        public String MainPhotoUrl;
+        @SerializedName("photosUrl")
+        public String[] PhotosUrls;
+        @SerializedName("latitude")
+        public double Latitude;
+        @SerializedName("longitude")
+        public double Longitude;
+        @SerializedName("workingHours")
+        public String WorkingHours;
+    }
+
     public static class loginRequest
     {
         @SerializedName("email")
@@ -271,6 +373,12 @@ public class ServerRequester {
         Call<List<PlaceCategoryShortInfo>> GetCityPlaces(@Path("id") int id);
         @GET("cities/{id}/placesByCategory/{categoryId}")
         Call<PlaceShortInfo[]> GetPlacesByCategory(@Path("id") int id, @Path("categoryId") int categoryId);
+        @GET("cities/places/{placeId}")
+        Call<PlaceInfo> GetPlaceInfo(@Path("placeId") int placeId);
+        @GET("user/Favorites/AddOrRemove")
+        Call<Boolean> ChangeFavoritesState(@Header("Authorization") String token, @Query("placeId") int placeId);
+        @GET("user/Favorites")
+        Call<List<PlaceInfo>> GetFavoritesFromServer(@Header("Authorization") String token);
     }
 }
 

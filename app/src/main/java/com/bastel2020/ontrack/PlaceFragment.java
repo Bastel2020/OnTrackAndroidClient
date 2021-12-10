@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -14,43 +17,33 @@ import androidx.fragment.app.Fragment;
  */
 public class PlaceFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static View v;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public PlaceFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PlaceFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PlaceFragment newInstance(String param1, String param2) {
+    public static PlaceFragment newInstance(String placeName, int placeId) {
         PlaceFragment fragment = new PlaceFragment();
+
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        args.putString("placeName", placeName);
+        args.putInt("placeId", placeId);
+
+        //TextView name = v.findViewById(R.id.placeName_text);
+        //name.setText(placeName);
+        ServerRequester.GetPlaceInfo(v, placeId);
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        if(savedInstanceState != null) {
+            if (savedInstanceState.containsKey("placeName")) {
+                TextView name = getView().findViewById(R.id.placeName_text);
+                name.setText(savedInstanceState.getString("placeName"));
+            }
+            if (savedInstanceState.containsKey("placeId")) {
+                ServerRequester.GetPlaceInfo(getView(), savedInstanceState.getInt("placeId"));
+            }
         }
     }
 
@@ -58,6 +51,41 @@ public class PlaceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_place, container, false);
+        v = inflater.inflate(R.layout.fragment_place, container, false);
+        return v;
+    }
+
+    public static void UpdateEntities(View view, ServerRequester.PlaceInfo data)
+    {
+        TextView name = v.findViewById(R.id.placeName_text);
+        TextView address = v.findViewById(R.id.placeAddress_text);
+        TextView workingHours = v.findViewById(R.id.placeWorkingHours_text);
+        TextView enterCost = v.findViewById(R.id.placeEnterCost_text);
+        TextView placeSite = v.findViewById(R.id.placeSite_text);
+        TextView description = v.findViewById(R.id.placeDescription_text);
+        ProgressBar progressBar = v.findViewById(R.id.place_progressBar);
+
+        ImageButton addToFavorites = v.findViewById(R.id.place_favorites_button);
+
+        if (FavoritesLogic.ContainsPlace(data.Id))
+            addToFavorites.setBackgroundResource(R.drawable.favorite_checked);
+        else
+            addToFavorites.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24);
+
+        addToFavorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FavoritesLogic.ChangeFavoritesButtonState(v.getContext(), addToFavorites, data.Id, data.Name, data.TextLocation);
+            }
+        });
+
+        name.setText(data.Name);
+        address.setText(data.TextLocation);
+        workingHours.setText(data.WorkingHours);
+        enterCost.setText(data.EnterCost);
+        placeSite.setText(v.getContext().getString(R.string.placeSite_label) + " " + data.PlaceSite);
+        description.setText(data.Description);
+
+        progressBar.setVisibility(View.INVISIBLE);
     }
 }

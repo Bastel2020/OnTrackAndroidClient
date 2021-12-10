@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,10 +25,10 @@ public class PlaceCategoryRecyclerAdapter extends RecyclerView.Adapter<PlaceCate
     private int cityId;
     private List<List<String>> placeNames;
     private List<List<String>> placeAddresses;
+    private List<int[]> placeIds;
     private ItemClickListener mClickListener;
     private Context context;
-    private FragmentManager fragmentManager;
-    PlaceCategoryRecyclerAdapter(Context context, int cityId, List<String> categoryName, List<List<String>> placeNames, List<List<String>> placeAddresses)
+    PlaceCategoryRecyclerAdapter(Context context, int cityId, List<String> categoryName, List<List<String>> placeNames, List<List<String>> placeAddresses, List<int[]> placeIds)
     {
         mInflater = LayoutInflater.from(context);
         this.context = context;
@@ -37,6 +36,7 @@ public class PlaceCategoryRecyclerAdapter extends RecyclerView.Adapter<PlaceCate
         this.categoryName = categoryName;
         this.placeNames = placeNames;
         this.placeAddresses = placeAddresses;
+        this.placeIds = placeIds;
     }
 
 
@@ -55,10 +55,11 @@ public class PlaceCategoryRecyclerAdapter extends RecyclerView.Adapter<PlaceCate
 
         LinearLayoutManager horizontalManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         holder.placesRecycle.setLayoutManager(horizontalManager);
-        PlacesRecyclerAdapter adapter = new PlacesRecyclerAdapter(context, placeNames.get(position), placeAddresses.get(position));
+        PlacesRecyclerAdapter adapter = new PlacesRecyclerAdapter(context, placeNames.get(position), placeAddresses.get(position), placeIds.get(position));
         holder.placesRecycle.setAdapter(adapter);
-        TextView test = holder.itemView.findViewById(R.id.showAll_label);
-        test.setOnClickListener(new View.OnClickListener() {
+
+        TextView showAllLabel = holder.itemView.findViewById(R.id.showAll_label);
+        showAllLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -80,6 +81,7 @@ public class PlaceCategoryRecyclerAdapter extends RecyclerView.Adapter<PlaceCate
             super(itemView);
             placeCategory = itemView.findViewById(R.id.placeCategoryName_label);
             placesRecycle = itemView.findViewById(R.id.categoryItems_recycle);
+
             itemView.setOnClickListener(this);
         }
 

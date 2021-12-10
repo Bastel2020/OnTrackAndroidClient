@@ -5,9 +5,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -19,12 +23,14 @@ public class PlacesBigRecyclerAdapter extends RecyclerView.Adapter<PlacesBigRecy
     private LayoutInflater mInflater;
     private List<String> placeNames;
     private List<String> placeAddresses;
+    private int[] placeIds;
     private ItemClickListener mClickListener;
-    PlacesBigRecyclerAdapter(Context context, List<String> placeNames, List<String> placeAddresses)
+    PlacesBigRecyclerAdapter(Context context, List<String> placeNames, List<String> placeAddresses, int[] placeIds)
     {
         mInflater = LayoutInflater.from(context);
         this.placeNames = placeNames;
         this.placeAddresses = placeAddresses;
+        this.placeIds = placeIds;
     }
 
 
@@ -45,6 +51,32 @@ public class PlacesBigRecyclerAdapter extends RecyclerView.Adapter<PlacesBigRecy
         String placeAddress = placeAddresses.get(position);
         holder.nameField.setText(placeName);
         holder.placeAddressField.setText(placeAddress);
+
+        if (FavoritesLogic.ContainsPlace(placeIds[position]))
+            holder.favoritesButton.setBackgroundResource(R.drawable.favorite_checked);
+        else
+            holder.favoritesButton.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24);
+
+        holder.favoritesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FavoritesLogic.ChangeFavoritesButtonState(v.getContext(), holder.favoritesButton, placeIds[position], placeNames.get(position), placeAddresses.get(position));
+            }
+        });
+
+        holder.placePictureBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFragment(PlaceFragment.newInstance(placeNames.get(position), placeIds[position]), (AppCompatActivity)v.getContext());
+            }
+        });
+
+        mClickListener = new PlacesBigRecyclerAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                loadFragment(PlaceFragment.newInstance(placeNames.get(position), placeIds[position]), (AppCompatActivity)view.getContext());
+            }
+        };
     }
 
     @Override
@@ -54,11 +86,16 @@ public class PlacesBigRecyclerAdapter extends RecyclerView.Adapter<PlacesBigRecy
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView nameField, placeAddressField;
+        ImageButton placePictureBtn, favoritesButton;
 
         ViewHolder(View itemView) {
             super(itemView);
+
             nameField = itemView.findViewById(R.id.placeNameBig_label);
             placeAddressField = itemView.findViewById(R.id.placeAdressBig_label);
+            placePictureBtn = itemView.findViewById(R.id.placeImageBig_button);
+            favoritesButton = itemView.findViewById(R.id.AddPlaceToFavsBig_button);
+
             itemView.setOnClickListener(this);
         }
 
@@ -76,6 +113,14 @@ public class PlacesBigRecyclerAdapter extends RecyclerView.Adapter<PlacesBigRecy
             mClickListener = itemClickListener;
         }
 
+    }
+
+    public void loadFragment(Fragment fragment, AppCompatActivity activity) {
+        // load fragment
+        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.default_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     // parent activity will implement this method to respond to click events

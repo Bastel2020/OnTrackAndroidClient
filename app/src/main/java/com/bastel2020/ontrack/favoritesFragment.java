@@ -23,7 +23,7 @@ public class favoritesFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private PlaceCategoryRecyclerAdapter testAdapter;
+    private PlacesBigRecyclerAdapter testAdapter;
 
     public favoritesFragment() {
         // Required empty public constructor
@@ -55,44 +55,30 @@ public class favoritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ArrayList<String> categories = new ArrayList<>();
-        categories.add("Достопримечательности");
-        categories.add("Парки");
-        categories.add("Торговые центры");
-        ArrayList<String> dost = new ArrayList<>();
-        dost.add("Достопримечательность 1");
-        dost.add("Достопримечательность 2");
-        dost.add("Достопримечательность 3");
-        ArrayList<String> parks = new ArrayList<>();
-        parks.add("Парк 1");
-        parks.add("Парк 2");
-        parks.add("Парк 3");
-        ArrayList<String> malls = new ArrayList<>();
-        malls.add("Торговый центр 1");
-        malls.add("Торговый центр 2");
-        malls.add("Торговый центр 3");
-        ArrayList<String> placeAddressess = new ArrayList<>();
-        placeAddressess.add("Адрес 1");
-        placeAddressess.add("Адрес 2");
-        placeAddressess.add("Адрес 3");
-
-        ArrayList<List<String>> allPlaces = new ArrayList<List<String>>();
-        allPlaces.add(dost);
-        allPlaces.add(parks);
-        allPlaces.add(malls);
-
-        ArrayList<List<String>> allAddresses = new ArrayList<List<String>>();
-        allAddresses.add(placeAddressess);
-        allAddresses.add(placeAddressess);
-        allAddresses.add(placeAddressess);
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_favorites, container, false);
 
-        RecyclerView recyclerView = v.findViewById(R.id.testRecycle);
+        RecyclerView recyclerView = v.findViewById(R.id.favoritesRecycle);
         LinearLayoutManager horizontalManager = new LinearLayoutManager(v.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(horizontalManager);
-        testAdapter = new PlaceCategoryRecyclerAdapter(v.getContext(), 1, categories, allPlaces, allAddresses);
+
+        List<DbContext.TripLiteModel> data = FavoritesLogic.GetFavorites();
+        List<String> tripNames = new ArrayList<String>();
+        List<String> tripAddresses = new ArrayList<String>();
+        int[] tripIds = new int[data.size()];
+
+        int counter = 0;
+        for (DbContext.TripLiteModel itVar: data)
+        {
+            tripNames.add(itVar.Name);
+            tripAddresses.add(itVar.TextLocation);
+
+            tripIds[counter] = itVar.Id;
+            counter++;
+        }
+
+        testAdapter = new PlacesBigRecyclerAdapter(v.getContext(), tripNames, tripAddresses, tripIds);
         recyclerView.setAdapter(testAdapter);
         return v;
     }

@@ -53,26 +53,34 @@ public class CityFragment extends Fragment {
         ArrayList<String> categories = new ArrayList<String>();
         ArrayList<List<String>> placesNames = new ArrayList<List<String>>();
         ArrayList<List<String>> placesTextAddresses = new ArrayList<List<String>>();
+        ArrayList<int[]> placesIds = new ArrayList<int[]>();
         for (ServerRequester.PlaceCategoryShortInfo itVar: data
              ) {
+            int[] Ids = new int[itVar.Places.length];
+
             categories.add(itVar.CategoryName);
             ArrayList<String> tempPlaces = new ArrayList<String>();
             ArrayList<String> tempAddresses = new ArrayList<String>();
 
+            int counter = 0;
             for (ServerRequester.PlaceShortInfo place: itVar.Places
                  ) {
                 tempPlaces.add(place.Name);
                 tempAddresses.add(place.TextLocation);
+
+                Ids[counter] = place.Id;
+                counter++;
             }
 
             placesNames.add(tempPlaces);
             placesTextAddresses.add(tempAddresses);
+            placesIds.add(Ids);
         }
 
         RecyclerView recyclerView = view.findViewById(R.id.cityPlaces_recycle);
         LinearLayoutManager horizontalManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(horizontalManager);
-        testAdapter = new PlaceCategoryRecyclerAdapter(view.getContext(), cityId, categories, placesNames, placesTextAddresses);
+        testAdapter = new PlaceCategoryRecyclerAdapter(view.getContext(), cityId, categories, placesNames, placesTextAddresses, placesIds);
         recyclerView.setAdapter(testAdapter);
 
         ProgressBar progressBar = view.findViewById(R.id.cityFragment_progressBar);

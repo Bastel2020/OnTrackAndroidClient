@@ -23,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
 
         ServerRequester.IsValidToken(getApplicationContext());
 
+        ServerRequester.SyncFavorites(getApplicationContext());
+
+
+
         setContentView(R.layout.activity_main);
 
         navBar = findViewById(R.id.bottomBar);
