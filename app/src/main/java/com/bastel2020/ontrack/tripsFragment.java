@@ -1,12 +1,15 @@
 package com.bastel2020.ontrack;
 
+import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,51 +17,72 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class tripsFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static String tripName, cityName, dates;
+    private static TextView tripNameField, cityNameField, cityDatesField;
+    private static int tripId;
+    private static RecyclerView tripDaysRecycle;
 
     public tripsFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment tripsFragment.
-     */
+    public tripsFragment(String tripName, String cityName, String dates, int tripId)
+    {
+        this.tripName = tripName;
+        this.cityName = cityName;
+        this.dates = dates;
+        this.tripId = tripId;
+    }
+
     // TODO: Rename and change types and number of parameters
-    public static tripsFragment newInstance(String param1, String param2) {
+    public static tripsFragment newInstance() {
         tripsFragment fragment = new tripsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trips, container, false);
+        View v = inflater.inflate(R.layout.fragment_trips, container, false);
+
+        tripNameField = v.findViewById(R.id.tripName_field);
+        cityNameField = v.findViewById(R.id.tripCityName_field);
+        cityDatesField = v.findViewById(R.id.tripDates_field);
+
+        tripDaysRecycle = v.findViewById(R.id.tripDays_recycle);
+
+        if (tripName != null && tripName != "")
+            tripNameField.setText(tripName);
+        if (cityName != null && cityName != "")
+            cityNameField.setText(cityName);
+        if (dates != null && dates != "")
+            cityDatesField.setText(dates);
+
+        ServerRequester.GetTripInfo(v.getContext(), tripId);
+
+
+        return v;
+    }
+
+    public static void UpdateEntities(Context context, ServerRequester.TripInfo data)
+    {
+        tripName = (data.Name);
+        tripNameField.setText(data.Name);
+
+        cityName = data.DestinationName;
+        cityNameField.setText(data.DestinationName);
+
+        dates = data.TripStart + " - " + data.TripEnd;
+        cityDatesField.setText(dates);
+
+        LinearLayoutManager verticalManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        tripDaysRecycle.setLayoutManager(verticalManager);
+        TripDaysRecyclerAdapter adapter = new TripDaysRecyclerAdapter(context, data.TripDays);
+        tripDaysRecycle.setAdapter(adapter);
     }
 }

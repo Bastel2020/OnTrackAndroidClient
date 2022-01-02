@@ -81,6 +81,46 @@ public class MainFragment extends Fragment {
             }
         });
 
+        kaliningradButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new CityFragment(2);
+                loadFragment(fragment);
+            }
+        });
+
+        mskButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new CityFragment(3);
+                loadFragment(fragment);
+            }
+        });
+
+        kazanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new CityFragment(4);
+                loadFragment(fragment);
+            }
+        });
+
+        sochiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new CityFragment(5);
+                loadFragment(fragment);
+            }
+        });
+
+        spbButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new CityFragment(6);
+                loadFragment(fragment);
+            }
+        });
+
         return view;
     }
 

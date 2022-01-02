@@ -1,12 +1,21 @@
 package com.bastel2020.ontrack;
 
+import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,50 +24,99 @@ import android.view.ViewGroup;
  */
 public class profileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static TextView name, email;
+    private static Fragment activeTripsFragment;
 
     public profileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment profileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static profileFragment newInstance(String param1, String param2) {
+    public static profileFragment newInstance() {
         profileFragment fragment = new profileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View v = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        name = v.findViewById(R.id.nameInProfile_field);
+        email = v.findViewById(R.id.emailInProfile_field);
+        activeTripsFragment = new activeTripsInProfileFragment();
+
+        FragmentManager fm = ((AppCompatActivity)v.getContext()).getSupportFragmentManager();
+        ViewStateAdapter sa = new ViewStateAdapter(fm, getLifecycle());
+        final ViewPager2 pa = v.findViewById(R.id.profile_pagger);
+        pa.setAdapter(sa);
+
+        TabLayout tabLayout = v.findViewById(R.id.tripInProfile_tabLayout);
+//        tabLayout.addTab(tabLayout.newTab().setText("Активные"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Архив"));
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                pa.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        pa.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                tabLayout.selectTab(tabLayout.getTabAt(position));
+            }
+        });
+
+        ServerRequester.LoadProfileInfo(getContext());
+
+        return v;
+    }
+
+    public static void UpdateEntities(Context context, ServerRequester.UserInfo data)
+    {
+        name.setText(data.Username);
+        email.setText(data.Email);
+        activeTripsFragment = new activeTripsInProfileFragment(context, data.UserTrips);
+
+    }
+
+    private class ViewStateAdapter extends FragmentStateAdapter {
+
+        public ViewStateAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
+            super(fragmentManager, lifecycle);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            // Hardcoded in this order, you'll want to use lists and make sure the titles match
+            if (position == 0) {
+                return activeTripsFragment;
+            }
+            return new archiveTripsInProfileFragment();
+        }
+
+        @Override
+        public int getItemCount() {
+            // Hardcoded, use lists
+            return 2;
+        }
     }
 }

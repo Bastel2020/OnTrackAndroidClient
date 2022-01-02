@@ -82,6 +82,24 @@
                 app:layout_constraintTop_toBottomOf="@+id/placeAddress_text" />
 
             <TextView
+                android:id="@+id/enterCost_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/enterCost_label"
+                android:textColor="@color/textSecondary"
+                android:textColorHint="@color/textSecondary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/placeWorkingHours_text" />
+
+            <TextView
                 android:id="@+id/placeName_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -180,7 +198,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/placeWorkingHours_text" />
+                app:layout_constraintTop_toBottomOf="@+id/enterCost_label" />
 
             <TextView
                 android:id="@+id/placeSite_text"

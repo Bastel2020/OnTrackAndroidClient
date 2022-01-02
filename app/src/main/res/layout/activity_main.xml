@@ -15,6 +15,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp"
+        app:itemIconTint="@color/textMain2"
+        app:itemRippleColor="@color/textMain2"
+        app:itemTextColor="@color/textMain"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_navigation_menu" />
 

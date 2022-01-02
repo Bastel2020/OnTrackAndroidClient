@@ -10,4 +10,5 @@
     <color name="textMain">#151515</color>
     <color name="textMain2">#2234DB</color>
     <color name="textSecondary">#858585</color>
+    <color name="citiesLabelBackground">#4F313131</color>
 </resources>

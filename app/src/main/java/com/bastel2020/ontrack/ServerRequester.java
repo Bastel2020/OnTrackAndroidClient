@@ -247,6 +247,55 @@ public class ServerRequester {
         });
     }
 
+    public static void LoadProfileInfo(Context context)
+    {
+        DbContext db = new DbContext(context);
+        String token = db.GetToken();
+        Call<UserInfo> call = service.GetProfileInfo("Bearer " + token);
+        call.enqueue(new Callback<UserInfo>() {
+            @Override
+            public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                if (response.isSuccessful())
+                {
+                    profileFragment.UpdateEntities(context, response.body());
+                    Log.i(TAG, "Get profile info success");
+                }
+                else { Log.e(TAG, "Get profile info failed! Status code: " + response.code()); }
+            }
+
+            @Override
+            public void onFailure(Call<UserInfo> call, Throwable t) {
+                Log.e(TAG, "Get profile info failed! Error: " + t.getMessage() + " " + t.getCause().getMessage());
+            }
+        });
+    }
+
+    public static void GetTripInfo(Context context, int tripId)
+    {
+        DbContext db = new DbContext(context);
+        String token = db.GetToken();
+        Call<TripInfo> call = service.GetTripInfo(tripId, "Bearer " + token);
+        call.enqueue(new Callback<TripInfo>() {
+            @Override
+            public void onResponse(Call<TripInfo> call, Response<TripInfo> response) {
+                if (response.isSuccessful())
+                {
+                    tripsFragment.UpdateEntities(context, response.body());
+                    Log.i(TAG, "Get trip Info success");
+                }
+                else
+                {
+                    Log.e(TAG, "can't get trip info! Status code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Log.e(TAG, "can't get trip info! Error while making request. " + t.getMessage());
+            }
+        });
+    }
+
     public static class loginResult
     {
         @SerializedName("access_token")
@@ -273,14 +322,6 @@ public class ServerRequester {
         public TripShortInfo[] UserTrips;
     }
 
-    public static class TripShortInfo
-    {
-        @SerializedName("Id")
-        public int Id;
-        @SerializedName("Name")
-        public String Name;
-    }
-
     public static class PlaceCategoryShortInfo
     {
         @SerializedName("category")
@@ -299,6 +340,112 @@ public class ServerRequester {
         public String TextLocation;
         @SerializedName("mainPhotoUrl")
         public String MainPhotoUrl;
+    }
+
+    public static class TripShortInfo
+    {
+        @SerializedName("Id")
+        public int Id;
+        @SerializedName("Name")
+        public String Name;
+        @SerializedName("DestinationId")
+        public int DestinationId;
+        @SerializedName("DestinationName")
+        public String DestinationName;
+        @SerializedName("TripStart")
+        public String TripStart;
+        @SerializedName("TripEnd")
+        public String tripEnd;
+        @SerializedName("ActionsCount")
+        public int placesCount;
+        @SerializedName("FirstTwoUsers")
+        public UserInTripShortInfo[] firstUsers;
+        @SerializedName("AdditionalUserCount")
+        public int AdditionalUserCount;
+    }
+
+    public static class TripInfo
+    {
+        @SerializedName("Id")
+        public int Id;
+        @SerializedName("Name")
+        public String Name;
+        @SerializedName("DestinationId")
+        public int DestinationId;
+        @SerializedName("DestinationName")
+        public String DestinationName;
+        @SerializedName("InviteCode")
+        public String InviteCode;
+        @SerializedName("TripStart")
+        public String TripStart;
+        @SerializedName("TripEnd")
+        public String TripEnd;
+        @SerializedName("Users")
+        public UserInTripShortInfo[] placesCount;
+        @SerializedName("TripDays")
+        public TripDayInfo[] TripDays;
+        @SerializedName("Polls")
+        public Poll[] Polls;
+        @SerializedName("RequiedRoleForInviteCode")
+        public int RequiedRoleForInviteCode;
+    }
+
+    public static class TripDayInfo
+    {
+        @SerializedName("TripDayId")
+        public int Id;
+        @SerializedName("Date")
+        public String Date;
+        @SerializedName("Actions")
+        public TripAction[] Actions;
+    }
+
+    public static class TripAction
+    {
+        @SerializedName("Id")
+        public int Id;
+        @SerializedName("Name")
+        public String Name;
+        @SerializedName("Description")
+        public String Description;
+        @SerializedName("Location")
+        public String Location;
+        @SerializedName("Files")
+        public String Files;
+        @SerializedName("TimeOfAction")
+        public String TimeOfAction;
+    }
+
+    public static class Poll
+    {
+        @SerializedName("Id")
+        public int Id;
+        @SerializedName("Name")
+        public String Name;
+        @SerializedName("Description")
+        public String Description;
+        @SerializedName("Variants")
+        public PollVariant[] PollVariants;
+    }
+
+    public class PollVariant
+    {
+        @SerializedName("Id")
+        public int Id;
+        @SerializedName("Answer")
+        public String Answer;
+    }
+
+    public static class UserInTripShortInfo
+    {
+        @SerializedName("Id")
+        public int Id;
+        @SerializedName("Username")
+        public String Username;
+        @SerializedName("AvatarPath")
+        public String AvatarPath;
+        @SerializedName("Role")
+        public int Role;
     }
 
     public static class PlaceInfo
@@ -379,26 +526,9 @@ public class ServerRequester {
         Call<Boolean> ChangeFavoritesState(@Header("Authorization") String token, @Query("placeId") int placeId);
         @GET("user/Favorites")
         Call<List<PlaceInfo>> GetFavoritesFromServer(@Header("Authorization") String token);
+        @GET("user")
+        Call<UserInfo> GetProfileInfo(@Header("Authorization") String token);
+        @GET("trips/{id}")
+        Call<TripInfo> GetTripInfo(@Path("id") int id, @Header("Authorization") String token);
     }
 }
-
-//final class AuthorizationRequestInterceptor implements Interceptor {
-//    private String token;
-//
-//    public AuthorizationRequestInterceptor(String token) {
-//        this.token = token;
-//    }
-//
-//    @Override public okhttp3.Response intercept(Interceptor.Chain chain) throws IOException {
-//        Request originalRequest = chain.request();
-//        if (originalRequest.body() == null || originalRequest.header("Authorization") != null) {
-//            return chain.proceed(originalRequest);
-//        }
-//
-//        okhttp3.Request authorizedRequest = originalRequest.newBuilder()
-//                .header("Authorization", token)
-//                .method(originalRequest.method(), originalRequest.body())
-//                .build();
-//        return chain.proceed(authorizedRequest);
-//    }
-//}
