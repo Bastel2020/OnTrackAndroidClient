@@ -53,6 +53,24 @@
     <string name="archiveTrips_profile_tabLabel">Архив</string>
     <string name="noActiveTrips_profile_label">Нет активных поездок</string>
     <string name="noArchiveTrips_profile_label">Нет поездок в архиве</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="emptyActionName_label"><i>Событие без названия</i></string>
+    <string name="noteInAction_label">Комментарий</string>
+    <string name="noteInAction_hint">Добавьте заметку о событии, чтобы ничего не упустить</string>
+    <string name="addPoll_label">Добавить опрос</string>
+    <string name="SaveChanges_label">Сохранить изменения</string>
+    <string name="members_main_label">Участники поездки</string>
+    <string name="shareCode_members_label">Поделитесь кодом и пригласите участников:</string>
+    <string name="generateNewCode_label">Сгенерировать новый код</string>
+    <string name="generateNewCodeDescription_label">Если вы сгенерируете новый код, старый перестанет работать.</string>
+    <string name="generateNewCodeDescription2_label">Участники не смогут присоединиться по старому коду.</string>
+    <string name="trip_main_label">Поездка</string>
+    <string name="createTrip_main_label">Создание поездки</string>
+    <string name="noTrips_label">Здесь пока что ничего нет :(</string>
+    <string name="createFirstTrip_label">Создайте свою первую поездку!</string>
+    <string name="JoinByCode_label">Или присоединитесь по коду</string>
+    <string name="EnterCode_hint">Введите код доступа</string>
+    <string name="CreateTripStartDate_label">Дата начала поездки</string>
+    <string name="CreateTripEndDate_label">Дата конца поездки</string>
+
+    <string name="hello_blank_fragment">Страница пока не реализована</string>
 </resources>

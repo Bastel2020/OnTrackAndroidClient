@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="48dp"
+    tools:context=".TripMembersFragment">
+
+    <ImageButton
+        android:id="@+id/tripMembersBack_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/white"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/arrow_back_32"
+        app:layout_constraintBottom_toTopOf="@+id/separator"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/arrow_back_32" />
+
+    <TextView
+        android:id="@+id/tripMembers_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="24dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/members_main_label"
+        android:textColor="@color/textMain"
+        android:textColorHint="@color/textMain"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tripMembersBack_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginTop="60dp"
+        android:background="@color/textSecondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/tripMembers_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+        android:paddingBottom="64dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/separator">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tripMembersPage_recycle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <View
+                android:id="@+id/separator6"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/textSecondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tripMembersPage_recycle" />
+
+            <ImageView
+                android:id="@+id/copyCodeToClipboard_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/add_24"
+                app:layout_constraintBottom_toBottomOf="@+id/generateInvite_input"
+                app:layout_constraintStart_toEndOf="@+id/generateInvite_input"
+                app:layout_constraintTop_toTopOf="@+id/generateInvite_input"
+                app:srcCompat="@drawable/copy_to_clipboard_24" />
+
+            <ImageView
+                android:id="@+id/refreshCode_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/add_24"
+                app:layout_constraintStart_toStartOf="@+id/generateInvite_input"
+                app:layout_constraintTop_toBottomOf="@+id/generateInvite_input"
+                app:srcCompat="@drawable/refresh_24" />
+
+            <TextView
+                android:id="@+id/shareCode_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:ellipsize="none"
+                android:singleLine="false"
+                android:text="@string/shareCode_members_label"
+                android:textColor="@color/textMain"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/separator6" />
+
+            <TextView
+                android:id="@+id/generateCodeDescription_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:ellipsize="none"
+                android:singleLine="false"
+                android:text="@string/generateNewCodeDescription_label"
+                android:textColor="@color/textMain"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/generateNewCode_label" />
+
+            <TextView
+                android:id="@+id/generateCodeDescription2_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:ellipsize="none"
+                android:singleLine="false"
+                android:text="@string/generateNewCodeDescription2_label"
+                android:textColor="@color/textMain"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/generateCodeDescription_label" />
+
+            <TextView
+                android:id="@+id/generateNewCode_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="24dp"
+                android:ellipsize="none"
+                android:singleLine="false"
+                android:text="@string/generateNewCode_label"
+                android:textColor="@color/textMain2"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/refreshCode_button"
+                app:layout_constraintTop_toTopOf="@+id/refreshCode_button" />
+
+            <EditText
+                android:id="@+id/generateInvite_input"
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:editable="false"
+                android:ellipsize="end"
+                android:ems="10"
+                android:enabled="false"
+                android:gravity="center_horizontal"
+                android:hint="Не создан"
+                android:inputType="textPersonName"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/shareCode_label"
+                app:layout_constraintTop_toBottomOf="@+id/shareCode_label" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

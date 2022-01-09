@@ -79,7 +79,7 @@ public class TripsInProfileRecyclerAdapter extends RecyclerView.Adapter<TripsInP
                 holder.tripMembersSecond.setVisibility(View.VISIBLE);
                 holder.tripMembersFirst.setVisibility(View.VISIBLE);
                 String x = usersInRightMenu.get(position)[0].Username.substring(0, 1);
-                holder.tripMembersSecond.setBackground(new TextDrawable(usersInRightMenu.get(position)[0].Username.substring(0, 1)));
+                holder.tripMembersSecond.setImageDrawable(new TextDrawable(usersInRightMenu.get(position)[0].Username.substring(0, 1)));
             }
             else
             {

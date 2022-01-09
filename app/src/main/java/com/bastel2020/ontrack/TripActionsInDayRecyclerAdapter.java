@@ -5,75 +5,88 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
-public class TripDaysRecyclerAdapter extends RecyclerView.Adapter<TripDaysRecyclerAdapter.ViewHolder> {
+public class TripActionsInDayRecyclerAdapter extends RecyclerView.Adapter<TripActionsInDayRecyclerAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
-    private ServerRequester.TripDayInfo[] tripDays;
+    private ServerRequester.TripAction[] allTripActions;
+    private List<ServerRequester.TripAction> firstTripActions;
+    private int tripDayId;
+    private String tripDate;
     private ItemClickListener mClickListener;
     private Context context;
-    TripDaysRecyclerAdapter(Context context, ServerRequester.TripDayInfo[] tripDayInfos)
+    TripActionsInDayRecyclerAdapter(Context context, ServerRequester.TripAction[] allTripActions, int tripDayId, String tripDate)
     {
         mInflater = LayoutInflater.from(context);
-        this.tripDays = tripDayInfos;
+        this.allTripActions = allTripActions;
+        this.tripDayId = tripDayId;
+        this.tripDate = tripDate;
+        firstTripActions = new ArrayList<ServerRequester.TripAction>();
+        if (allTripActions.length == 0)
+        {
+            firstTripActions.add(new ServerRequester.TripAction());
+        }
+        else
+            firstTripActions.addAll(Arrays.asList(allTripActions));
         this.context = context;
+        firstTripActions.add(new ServerRequester.TripAction());
     }
 
 
     @NonNull
     @Override
-    public TripDaysRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.trip_action_list_item, parent, false);
+    public TripActionsInDayRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = mInflater.inflate(R.layout.trip_action_string_list_item, parent, false);
         return  new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TripDaysRecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TripActionsInDayRecyclerAdapter.ViewHolder holder, int position) {
         if (position + 1 > getItemCount()) {
             Log.e(TAG, "Try to bind element index out bounds array!");
             return;
         }
 
-        holder.dateLabel.setText(tripDays[position].Date);
-        holder.dayOfWeekLabel.setText(tripDays[position].DayOfWeek);
-
-        LinearLayoutManager verticalManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false) {
-            @Override
-            public boolean canScrollVertically() {
-            return false; }
-        };
-        holder.actionsInDayRecycler.setLayoutManager(verticalManager);
-        TripActionsInDayRecyclerAdapter adapter;
-        if (tripDays[position].Actions.length > 4)
-             adapter = new TripActionsInDayRecyclerAdapter(context, Arrays.copyOfRange(tripDays[position].Actions, 0, 4), tripDays[position].Id, tripDays[position].Date);
+        if (firstTripActions.get(position) == null || firstTripActions.get(position).Name == null)
+            holder.tripActionName.setText(R.string.emptyActionName_label);
         else
-            adapter = new TripActionsInDayRecyclerAdapter(context, tripDays[position].Actions, tripDays[position].Id, tripDays[position].Date);
+            holder.tripActionName.setText(firstTripActions.get(position).Name);
 
-        holder.actionsInDayRecycler.setAdapter(adapter);
 
-        holder.expandActionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TripActionsInDayRecyclerAdapter adapter;
-                if (tripDays[position].Actions.length > 4) {
-                    adapter = new TripActionsInDayRecyclerAdapter(context, tripDays[position].Actions, tripDays[position].Id, tripDays[position].Date);
-                    holder.actionsInDayRecycler.setAdapter(adapter);
+        if (firstTripActions.get(position).Name == "")
+            holder.tripActionName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    TextView t = v.findViewById(R.id.tripActionName_label);
+                    String s = t.getText().toString();
+                    if (!hasFocus && s != null && s.length() > 0)
+                        loadFragment(new EditActionFragment(s, tripDate, tripDayId), (AppCompatActivity)v.getContext());
+                    else
+                        Toast.makeText(v.getContext(), "Введите название события и нажмите Enter, чтобы перейти в меню подробного редактирования.", Toast.LENGTH_LONG);
                 }
-            }
-        });
+            });
+        else
+            holder.tripActionName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus)
+                        loadFragment(new EditActionFragment(allTripActions[position].Id, tripDate), (AppCompatActivity)v.getContext());
+                }
+            });
         //holder.dayOfWeekLabel.setText(tripDays[position].Id);
 
 //        holder.favoritesButton.setOnClickListener(new View.OnClickListener() {
@@ -100,21 +113,16 @@ public class TripDaysRecyclerAdapter extends RecyclerView.Adapter<TripDaysRecycl
 
     @Override
     public int getItemCount() {
-        return tripDays.length;
+        return firstTripActions.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView dateLabel, dayOfWeekLabel;
-        ImageButton expandActionsButton;
-        RecyclerView actionsInDayRecycler;
+        TextView tripActionName;
 
         ViewHolder(View itemView) {
             super(itemView);
 
-            dateLabel = itemView.findViewById(R.id.tripActionDate_label);
-            dayOfWeekLabel = itemView.findViewById(R.id.tripActionDayOfWeek_label);
-            expandActionsButton = itemView.findViewById(R.id.expandActions_button);
-            actionsInDayRecycler = itemView.findViewById(R.id.actionsInDay_recycle);
+            tripActionName = itemView.findViewById(R.id.tripActionName_label);
 
             itemView.setOnClickListener(this);
         }
@@ -125,7 +133,7 @@ public class TripDaysRecyclerAdapter extends RecyclerView.Adapter<TripDaysRecycl
         }
 
         public String getItem(int id) {
-            return tripDays[id].Date;
+            return allTripActions[id].Name;
         }
 
         // allows clicks events to be caught

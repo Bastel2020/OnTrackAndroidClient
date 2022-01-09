@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,25 +62,17 @@ public class NoAccountFragment extends Fragment {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new LoginFragment());
+                Helpers.loadFragment(new LoginFragment(), getActivity().getSupportFragmentManager());
             }
         });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new RegisterFragment());
+                Helpers.loadFragment(new RegisterFragment(), getActivity().getSupportFragmentManager());
             }
         });
 
         return view;
-    }
-
-    public void loadFragment(Fragment fragment) {
-        // load fragment
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.default_layout, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
     }
 }

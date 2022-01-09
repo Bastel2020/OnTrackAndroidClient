@@ -11,14 +11,16 @@
         android:id="@+id/usernameRegisterField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/username_tip"
         android:inputType="textPersonName"
+        android:textColor="@color/textMain"
+        android:textColorHint="@color/textSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/emailRegisterField"
@@ -29,6 +31,8 @@
         android:ems="10"
         android:hint="@string/email_tip"
         android:inputType="textEmailAddress"
+        android:textColor="@color/textMain"
+        android:textColorHint="@color/textSecondary"
         app:layout_constraintBottom_toTopOf="@+id/passwordRegisterField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
@@ -43,6 +47,8 @@
         android:ems="10"
         android:hint="@string/password_tip"
         android:inputType="textPassword"
+        android:textColor="@color/textMain"
+        android:textColorHint="@color/textSecondary"
         app:layout_constraintBottom_toTopOf="@+id/usernameRegisterField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

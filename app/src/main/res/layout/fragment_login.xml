@@ -10,27 +10,31 @@
         android:id="@+id/loginPasswordField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/password_tip"
         android:inputType="textPassword"
+        android:textColor="@color/textMain"
+        android:textColorHint="@color/textSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/loginEmailField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/email_tip"
         android:inputType="textEmailAddress"
+        android:textColor="@color/textMain"
+        android:textColorHint="@color/textSecondary"
         app:layout_constraintBottom_toTopOf="@+id/loginPasswordField"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:autofillHints="" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/loginButton2"

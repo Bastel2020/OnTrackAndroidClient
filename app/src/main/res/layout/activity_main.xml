@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp"
+        android:background="@color/white"
         app:itemIconTint="@color/textMain2"
         app:itemRippleColor="@color/textMain2"
         app:itemTextColor="@color/textMain"

@@ -6,7 +6,6 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -26,11 +25,12 @@ public class MainActivity extends AppCompatActivity {
         ServerRequester.SyncFavorites(getApplicationContext());
 
 
-
         setContentView(R.layout.activity_main);
 
         navBar = findViewById(R.id.bottomBar);
         navBar.setOnNavigationItemSelectedListener(selectedListener);
+
+        Helpers.loadFragment(new MainFragment(), getSupportFragmentManager());
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener selectedListener
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new NoAccountFragment();
                     else
                         fragment = new tripsFragment();
-                    loadFragment(fragment);
+                    Helpers.loadFragment(fragment, getSupportFragmentManager());
                     return true;
                 }
                 case R.id.favorites_page: {
@@ -53,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new NoAccountFragment();
                     else
                         fragment = new favoritesFragment();
-                    loadFragment(fragment);
+                    Helpers.loadFragment(fragment, getSupportFragmentManager());
                     return true;
                 }
                 case R.id.main_page: {
                     fragment = new MainFragment();
-                    loadFragment(fragment);
+                    Helpers.loadFragment(fragment, getSupportFragmentManager());
                     return true;
                 }
                 case R.id.profile_page: {
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new NoAccountFragment();
                     else
                         fragment = new profileFragment();
-                    loadFragment(fragment);
+                    Helpers.loadFragment(fragment, getSupportFragmentManager());
                     return true;
                 }
                 default: {
@@ -76,11 +76,11 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public void loadFragment(Fragment fragment) {
-        // load fragment
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.default_layout, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
+//    public void loadFragment(Fragment fragment) {
+//        // load fragment
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.default_layout, fragment);
+//        transaction.addToBackStack(null);
+//        transaction.commit();
+//    }
 }

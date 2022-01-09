@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_tripsFragment_to_noAccountFragment2"
             app:destination="@id/noAccountFragment" />
+        <action
+            android:id="@+id/action_tripsFragment_to_editActionFragment"
+            app:destination="@id/editActionFragment" />
+        <action
+            android:id="@+id/action_tripsFragment_to_tripMembersFragment"
+            app:destination="@id/tripMembersFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -91,10 +97,34 @@
         android:id="@+id/activeTripsInProfileFragment"
         android:name="com.bastel2020.ontrack.activeTripsInProfileFragment"
         android:label="fragment_active_trips_in_profile"
-        tools:layout="@layout/fragment_active_trips_in_profile" />
+        tools:layout="@layout/fragment_active_trips_in_profile" >
+        <action
+            android:id="@+id/action_activeTripsInProfileFragment_to_tripsFragment"
+            app:destination="@id/tripsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/archiveTripsInProfileFragment"
         android:name="com.bastel2020.ontrack.archiveTripsInProfileFragment"
         android:label="fragment_archive_trips_in_profile"
         tools:layout="@layout/fragment_archive_trips_in_profile" />
+    <fragment
+        android:id="@+id/editActionFragment"
+        android:name="com.bastel2020.ontrack.EditActionFragment"
+        android:label="fragment_edit_action"
+        tools:layout="@layout/fragment_edit_action" />
+    <fragment
+        android:id="@+id/tripMembersFragment"
+        android:name="com.bastel2020.ontrack.TripMembersFragment"
+        android:label="fragment_trip_members"
+        tools:layout="@layout/fragment_trip_members" />
+    <fragment
+        android:id="@+id/noTripsFragment"
+        android:name="com.bastel2020.ontrack.NoTripsFragment"
+        android:label="fragment_no_trips"
+        tools:layout="@layout/fragment_no_trips" />
+    <fragment
+        android:id="@+id/createTripFragment"
+        android:name="com.bastel2020.ontrack.CreateTripFragment"
+        android:label="fragment_create_trip"
+        tools:layout="@layout/fragment_create_trip" />
 </navigation>

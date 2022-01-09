@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,6 +21,7 @@ public class MainFragment extends Fragment {
 
     private SearchView searchView;
     private ImageButton ekbButton, kaliningradButton, mskButton, kazanButton, sochiButton, spbButton;
+    private FloatingActionButton createButton;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -64,7 +67,16 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        searchView = view.findViewById(R.id.search_places);
+
+        createButton = view.findViewById(R.id.create_button);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helpers.loadFragment(new CreateTripFragment(), ((AppCompatActivity)v.getContext()).getSupportFragmentManager());
+            }
+        });
+
+//        searchView = view.findViewById(R.id.search_places);
 
         ekbButton = view.findViewById(R.id.ekbButton);
         kaliningradButton = view.findViewById(R.id.klnButton);
@@ -77,7 +89,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new CityFragment(1);
-                loadFragment(fragment);
+                Helpers.loadFragment(fragment, getActivity().getSupportFragmentManager());
             }
         });
 
@@ -85,7 +97,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new CityFragment(2);
-                loadFragment(fragment);
+                Helpers.loadFragment(fragment, getActivity().getSupportFragmentManager());
             }
         });
 
@@ -93,7 +105,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new CityFragment(3);
-                loadFragment(fragment);
+                Helpers.loadFragment(fragment, getActivity().getSupportFragmentManager());
             }
         });
 
@@ -101,7 +113,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new CityFragment(4);
-                loadFragment(fragment);
+                Helpers.loadFragment(fragment, getActivity().getSupportFragmentManager());
             }
         });
 
@@ -109,7 +121,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new CityFragment(5);
-                loadFragment(fragment);
+                Helpers.loadFragment(fragment, getActivity().getSupportFragmentManager());
             }
         });
 
@@ -117,18 +129,10 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new CityFragment(6);
-                loadFragment(fragment);
+                Helpers.loadFragment(fragment, getActivity().getSupportFragmentManager());
             }
         });
 
         return view;
-    }
-
-    public void loadFragment(Fragment fragment) {
-        // load fragment
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.default_layout, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
     }
 }

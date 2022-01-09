@@ -33,7 +33,13 @@ public class activeTripsInProfileFragment extends Fragment {
 
         RecyclerView activeTripsRecycler = v.findViewById(R.id.activeTrips_recycle);
 
-        LinearLayoutManager verticalManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager verticalManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         activeTripsRecycler.setLayoutManager(verticalManager);
 
         activeTripsRecycler.setAdapter(new TripsInProfileRecyclerAdapter(context, data));

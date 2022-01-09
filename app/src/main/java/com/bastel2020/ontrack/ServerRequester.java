@@ -270,6 +270,31 @@ public class ServerRequester {
         });
     }
 
+    public static void CreateNewAction(Context context, CreateAction data)
+    {
+        DbContext db = new DbContext(context);
+        String token = db.GetToken();
+        Call<TripInfo> call = service.CreateAction(data, "Bearer " + token);
+        call.enqueue(new Callback<TripInfo>() {
+            @Override
+            public void onResponse(Call<TripInfo> call, Response<TripInfo> response) {
+                if (response.isSuccessful())
+                {
+                    Log.i(TAG, "Create new action success");
+                }
+                else
+                {
+                    Log.e(TAG, "Can't create new Action. Status code " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TripInfo> call, Throwable t) {
+                Log.e(TAG, "Can't create new Action. Error while sending request: " + t.getMessage() + " " + t.getCause().getMessage());
+            }
+        });
+    }
+
     public static void GetTripInfo(Context context, int tripId)
     {
         DbContext db = new DbContext(context);
@@ -280,8 +305,14 @@ public class ServerRequester {
             public void onResponse(Call<TripInfo> call, Response<TripInfo> response) {
                 if (response.isSuccessful())
                 {
-                    tripsFragment.UpdateEntities(context, response.body());
-                    Log.i(TAG, "Get trip Info success");
+                    if(response.code() == 200) {
+                        tripsFragment.UpdateEntities(context, response.body());
+                        Log.i(TAG, "Get trip Info success");
+                    }
+                    if(response.code() == 204)
+                    {
+                        tripsFragment.ShowNoTripsFragment(context);
+                    }
                 }
                 else
                 {
@@ -292,6 +323,57 @@ public class ServerRequester {
             @Override
             public void onFailure(Call call, Throwable t) {
                 Log.e(TAG, "can't get trip info! Error while making request. " + t.getMessage());
+            }
+        });
+    }
+
+    public static void GetAction(Context context, long actionId)
+    {
+        DbContext db = new DbContext(context);
+        String token = db.GetToken();
+        Call<TripAction> call = service.GetActionInfo(actionId, "Bearer " + token);
+        call.enqueue(new Callback<TripAction>() {
+            @Override
+            public void onResponse(Call<TripAction> call, Response<TripAction> response) {
+                if (response.isSuccessful())
+                {
+                    EditActionFragment.UpdateEntities(context, response.body());
+                    Log.i(TAG, "Get action Info success");
+                }
+                else
+                {
+                    Log.e(TAG, "can't get action info! Status code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Log.e(TAG, "can't get trip info! Error while making request. " + t.getMessage());
+            }
+        });
+    }
+
+    public static void EditAction(Context context, EditAction data)
+    {
+        DbContext db = new DbContext(context);
+        String token = db.GetToken();
+        Call<TripInfo> call = service.EditAction(data, "Bearer " + token);
+        call.enqueue(new Callback<TripInfo>() {
+            @Override
+            public void onResponse(Call<TripInfo> call, Response<TripInfo> response) {
+                if (response.isSuccessful())
+                {
+                    Log.i(TAG, "Create new action success");
+                }
+                else
+                {
+                    Log.e(TAG, "Can't create new Action. Status code " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TripInfo> call, Throwable t) {
+                Log.e(TAG, "Can't create new Action. Error while sending request: " + t.getMessage() + " " + t.getCause().getMessage());
             }
         });
     }
@@ -396,6 +478,8 @@ public class ServerRequester {
         public int Id;
         @SerializedName("Date")
         public String Date;
+        @SerializedName("DayOfWeek")
+        public String DayOfWeek;
         @SerializedName("Actions")
         public TripAction[] Actions;
     }
@@ -414,6 +498,11 @@ public class ServerRequester {
         public String Files;
         @SerializedName("TimeOfAction")
         public String TimeOfAction;
+
+        public TripAction()
+        {
+            Name = "";
+        }
     }
 
     public static class Poll
@@ -496,6 +585,7 @@ public class ServerRequester {
         @SerializedName("username")
         public String username;
 
+
         registerRequest(String email, String password, String username) {
             this.email = email;
             this.password = password;
@@ -508,6 +598,46 @@ public class ServerRequester {
         @SerializedName("result")
         public String RequestResult;
     }
+
+    public static class CreateAction {
+        @SerializedName("TripDayId")
+        public int tripDayId;
+        @SerializedName("Name")
+        public String name;
+        @SerializedName("Description")
+        public String description;
+        @SerializedName("timeOfAction")
+        public String actionTime;
+//        @SerializedName("Location")
+//        public String location;
+
+        CreateAction(int parentId, String name, String description, String actionTime) {
+            this.tripDayId = parentId;
+            this.name = name;
+            this.description = description;
+            this.actionTime = actionTime;
+        }
+    }
+
+        public static class EditAction {
+            @SerializedName("ActionId")
+            public int actionId;
+            @SerializedName("Name")
+            public String name;
+            @SerializedName("Description")
+            public String description;
+            @SerializedName("TimeOfAction")
+            public String actionTime;
+//        @SerializedName("Location")
+//        public String location;
+
+            EditAction(int parentId, String name, String description, String actionTime) {
+                this.actionId = parentId;
+                this.name = name;
+                this.description = description;
+                this.actionTime = actionTime;
+            }
+        }
 
     public interface Server {
         @POST("auth/signin")
@@ -528,7 +658,13 @@ public class ServerRequester {
         Call<List<PlaceInfo>> GetFavoritesFromServer(@Header("Authorization") String token);
         @GET("user")
         Call<UserInfo> GetProfileInfo(@Header("Authorization") String token);
+        @GET("trips/GetAction/{id}")
+        Call<TripAction> GetActionInfo(@Path("id") long id, @Header("Authorization") String token);
         @GET("trips/{id}")
         Call<TripInfo> GetTripInfo(@Path("id") int id, @Header("Authorization") String token);
+        @POST("trips/addAction")
+        Call<TripInfo> CreateAction(@Body CreateAction data, @Header("Authorization") String token);
+        @POST("trips/EditAction")
+        Call<TripInfo> EditAction(@Body EditAction data, @Header("Authorization") String token);
     }
 }

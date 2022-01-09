@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +27,8 @@ import com.google.android.material.tabs.TabLayout;
 public class profileFragment extends Fragment {
 
     private static TextView name, email;
+    private static ScrollView scroll;
+    private static ProgressBar progressBar;
     private static Fragment activeTripsFragment;
 
     public profileFragment() {
@@ -46,6 +50,11 @@ public class profileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        scroll = v.findViewById(R.id.profile_scroll);
+        scroll.setVisibility(View.INVISIBLE);
+
+        progressBar = v.findViewById(R.id.profile_progressBar);
 
         name = v.findViewById(R.id.nameInProfile_field);
         email = v.findViewById(R.id.emailInProfile_field);
@@ -95,6 +104,8 @@ public class profileFragment extends Fragment {
         email.setText(data.Email);
         activeTripsFragment = new activeTripsInProfileFragment(context, data.UserTrips);
 
+        scroll.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     private class ViewStateAdapter extends FragmentStateAdapter {
