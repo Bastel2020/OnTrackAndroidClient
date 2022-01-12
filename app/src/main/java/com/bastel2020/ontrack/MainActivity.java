@@ -5,6 +5,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -15,15 +16,15 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navBar;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
         ServerRequester.IsValidToken(getApplicationContext());
 
         ServerRequester.SyncFavorites(getApplicationContext());
-
 
         setContentView(R.layout.activity_main);
 
@@ -75,12 +76,4 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     };
-
-//    public void loadFragment(Fragment fragment) {
-//        // load fragment
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.default_layout, fragment);
-//        transaction.addToBackStack(null);
-//        transaction.commit();
-//    }
 }

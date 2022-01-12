@@ -38,6 +38,10 @@ public class DbContext {
         content.put("token", tok);
         db.insert("token", null, content);
     }
+    public static void DeleteToken()
+    {
+        db.execSQL("DROP TABLE IF EXISTS token");
+    }
 
     public static boolean RemovePlaceFromFavorites(int placeId)
     {

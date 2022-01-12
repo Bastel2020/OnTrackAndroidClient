@@ -1,5 +1,6 @@
 package com.bastel2020.ontrack;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -66,9 +68,16 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ServerRequester.RegisterUser(view.getContext(), emailField.getText().toString(), passwordField.getText().toString(), usernameField.getText().toString());
+                ServerRequester.IsValidToken(view.getContext());
             }
         });
 
         return view;
+    }
+
+    public static void OnAccountCreated(Context context)
+    {
+        ((AppCompatActivity)context).onBackPressed();
+        ((AppCompatActivity)context).onBackPressed();
     }
 }

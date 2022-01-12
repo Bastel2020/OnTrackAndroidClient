@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -26,12 +24,12 @@ public class TripsInProfileRecyclerAdapter extends RecyclerView.Adapter<TripsInP
     private ItemClickListener mClickListener;
 
     private List<Integer> tripsIds = new ArrayList<>();
-    private List<String> tripsNames = new ArrayList<>();
-    private List<String> tripsCities = new ArrayList<>();
-    private List<String> tripsDates = new ArrayList<>();
     private List<Integer> placesCount = new ArrayList<>();
-    private List<ServerRequester.UserInTripShortInfo[]> usersInRightMenu = new ArrayList<>();
     private List<Integer> additionalUsersCount = new ArrayList<>();
+    private List<String> tripsNames = new ArrayList<>();
+    private List<String> tripsCities= new ArrayList<>();
+    private List<String> tripsDates = new ArrayList<>();
+    private List<ServerRequester.UserInTripShortInfo[]> usersInRightMenu = new ArrayList<>();
     TripsInProfileRecyclerAdapter(Context context, ServerRequester.TripShortInfo[] trips)
     {
         mInflater = LayoutInflater.from(context);
@@ -71,19 +69,25 @@ public class TripsInProfileRecyclerAdapter extends RecyclerView.Adapter<TripsInP
             holder.tripMembersThird.setVisibility(View.VISIBLE);
             holder.tripMembersSecond.setVisibility(View.VISIBLE);
             holder.tripMembersFirst.setVisibility(View.VISIBLE);
+
+            holder.memberChar1.setText("+" + additionalUsersCount.get(position).toString());
+            holder.memberChar2.setText(usersInRightMenu.get(position)[0].Username.substring(0, 1));
+            holder.memberChar3.setText(usersInRightMenu.get(position)[1].Username.substring(0, 1));
         }
-        if (usersInRightMenu.get(position) != null && usersInRightMenu.get(position).length > 0)
+        else if (usersInRightMenu.get(position) != null && usersInRightMenu.get(position).length > 0)
         {
             if (usersInRightMenu.get(position).length > 1)
             {
                 holder.tripMembersSecond.setVisibility(View.VISIBLE);
                 holder.tripMembersFirst.setVisibility(View.VISIBLE);
-                String x = usersInRightMenu.get(position)[0].Username.substring(0, 1);
-                holder.tripMembersSecond.setImageDrawable(new TextDrawable(usersInRightMenu.get(position)[0].Username.substring(0, 1)));
+
+                holder.memberChar1.setText(usersInRightMenu.get(position)[0].Username.substring(0, 1));
+                holder.memberChar2.setText(usersInRightMenu.get(position)[1].Username.substring(0, 1));
             }
             else
             {
                 holder.tripMembersFirst.setVisibility(View.VISIBLE);
+                holder.memberChar1.setText(usersInRightMenu.get(position)[0].Username.substring(0, 1));
             }
         }
 
@@ -104,11 +108,20 @@ public class TripsInProfileRecyclerAdapter extends RecyclerView.Adapter<TripsInP
         ItemClickListener goToTripItemClick = new ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                loadFragment(new tripsFragment(tripsNames.get(position), tripsCities.get(position), tripsDates.get(position), tripsIds.get(position)), (AppCompatActivity)view.getContext());
+                Helpers.loadFragment(new tripsFragment(tripsNames.get(position), tripsCities.get(position), tripsDates.get(position), tripsIds.get(position)), ((AppCompatActivity)view.getContext()).getSupportFragmentManager());
             }
         };
-
         holder.setClickListener(goToTripItemClick);
+
+        View.OnClickListener goToUsers = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helpers.loadFragment(new TripMembersFragment(tripsIds.get(position)), ((AppCompatActivity)v.getContext()).getSupportFragmentManager());
+            }
+        };
+        holder.tripMembersThird.setOnClickListener(goToUsers);
+        holder.tripMembersSecond.setOnClickListener(goToUsers);
+        holder.tripMembersFirst.setOnClickListener(goToUsers);
     }
 
     @Override
@@ -117,8 +130,7 @@ public class TripsInProfileRecyclerAdapter extends RecyclerView.Adapter<TripsInP
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        View v;
-        TextView tripNamesField, tripDatesField, tripCityField, tripPlacesCountField;
+        TextView tripNamesField, tripDatesField, tripCityField, tripPlacesCountField, memberChar1, memberChar2, memberChar3;
         CircleImageView tripMembersFirst, tripMembersSecond, tripMembersThird;
 
         ViewHolder(View itemView) {
@@ -130,6 +142,10 @@ public class TripsInProfileRecyclerAdapter extends RecyclerView.Adapter<TripsInP
             tripDatesField = itemView.findViewById(R.id.tripDatesInList_label);
             tripCityField = itemView.findViewById(R.id.tripCityInList_label);
             tripPlacesCountField = itemView.findViewById(R.id.tripPlacesCountInList_label);
+
+            memberChar1 = itemView.findViewById(R.id.tripMemberChar1);
+            memberChar2 = itemView.findViewById(R.id.tripMemberChar2);
+            memberChar3 = itemView.findViewById(R.id.tripMemberChar3);
 
             tripMembersFirst = itemView.findViewById(R.id.tripMembersInList1);
             tripMembersFirst.setVisibility(View.INVISIBLE);
@@ -154,14 +170,6 @@ public class TripsInProfileRecyclerAdapter extends RecyclerView.Adapter<TripsInP
             mClickListener = itemClickListener;
         }
 
-    }
-
-    public void loadFragment(Fragment fragment, AppCompatActivity activity) {
-        // load fragment
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.default_layout, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
     }
 
     // parent activity will implement this method to respond to click events

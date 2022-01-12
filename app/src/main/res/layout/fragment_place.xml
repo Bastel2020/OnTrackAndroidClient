@@ -55,7 +55,7 @@
         android:id="@+id/editAction_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="64dp"
+        android:paddingBottom="60dp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -232,7 +232,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/placeSite_text" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -242,9 +242,20 @@
                 android:background="@color/textMain2"
                 android:text="@string/addToTrip_button"
                 android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textColorHint="@color/textSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/placeDescription_text" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

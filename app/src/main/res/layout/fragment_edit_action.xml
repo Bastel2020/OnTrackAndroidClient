@@ -22,11 +22,11 @@
         android:id="@+id/editActionBack_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@color/white"
-        android:backgroundTint="@color/white"
+        android:padding="8dp"
+        android:paddingStart="24dp"
         android:src="@drawable/arrow_back_32"
         app:layout_constraintBottom_toTopOf="@+id/separator"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,6 +107,8 @@
                 android:layout_marginEnd="24dp"
                 android:ems="10"
                 android:inputType="textPersonName"
+                android:textColor="@color/textMain"
+                android:textColorHint="@color/textSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/actionTime_edit"
                 app:layout_constraintTop_toBottomOf="@+id/actionDateInEdit_label" />
@@ -121,6 +123,8 @@
                 android:hint="время"
                 android:inputType="time"
                 android:maxLength="5"
+                android:textColor="@color/textMain"
+                android:textColorHint="@color/textSecondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/calendar_image" />
 
@@ -151,6 +155,8 @@
                 android:gravity="start|top"
                 android:hint="@string/noteInAction_hint"
                 android:inputType="textMultiLine"
+                android:textColor="@color/textMain"
+                android:textColorHint="@color/textSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/actionDescription_label" />
@@ -180,7 +186,7 @@
                 app:layout_constraintStart_toEndOf="@+id/addPoll_button"
                 app:layout_constraintTop_toTopOf="@+id/addPoll_button" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/actionSaveChanges_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -190,6 +196,8 @@
                 android:background="@color/textMain2"
                 android:text="@string/SaveChanges_label"
                 android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textColorHint="@color/textSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addPoll_label" />

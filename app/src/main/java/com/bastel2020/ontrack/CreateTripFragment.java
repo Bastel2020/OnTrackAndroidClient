@@ -1,5 +1,6 @@
 package com.bastel2020.ontrack;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
@@ -45,6 +47,7 @@ public class CreateTripFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -67,10 +70,32 @@ public class CreateTripFragment extends Fragment {
 
         tripCity.setAdapter(new ArrayAdapter<String>(v.getContext(), R.layout.support_simple_spinner_dropdown_item, new String[] {"Екатеринбург", "Калининград", "Москва", "Казань", "Сочи", "Санкт-Петербург"}));
         tripCity.setPrompt("Выберите город");
-        tripCity.setSelection(0);
+        //tripCity.setSelection(0);
+
+        CreateTripButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ServerRequester.CreateTrip(v.getContext(), new ServerRequester.CreateTrip(tripCity.getSelectedItemPosition() + 1, Name.getText().toString(), startDate.getText().toString(), endDate.getText().toString()));
+            }
+        });
+
+        JoinByCodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(joinCode != null && joinCode.getText() != null && joinCode.getText().toString() != null && joinCode.getText().toString() != "")
+                    ServerRequester.JoinToTripByCode(v.getContext(), joinCode.getText().toString());
+            }
+        });
 
         back.setOnClickListener(Helpers.backButtonListener);
 
         return v;
+    }
+
+    public static void OnTripCreated(ServerRequester.TripInfo createdTrip, Context context)
+    {
+        AppCompatActivity activity = (AppCompatActivity)context;
+        activity.onBackPressed();
+        Helpers.loadFragment(new tripsFragment(context, createdTrip), activity.getSupportFragmentManager());
     }
 }

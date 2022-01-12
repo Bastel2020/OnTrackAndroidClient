@@ -9,9 +9,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -74,28 +71,6 @@ public class TripDaysRecyclerAdapter extends RecyclerView.Adapter<TripDaysRecycl
                 }
             }
         });
-        //holder.dayOfWeekLabel.setText(tripDays[position].Id);
-
-//        holder.favoritesButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FavoritesLogic.ChangeFavoritesButtonState(v.getContext(), holder.favoritesButton, placeIds[position], placeNames.get(position), placeAddresses.get(position));
-//            }
-//        });
-
-//        holder.placePictureBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                loadFragment(PlaceFragment.newInstance(placeNames.get(position), placeIds[position]), (AppCompatActivity)v.getContext());
-//            }
-//        });
-
-//        mClickListener = new TripDaysRecyclerAdapter.ItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                loadFragment(PlaceFragment.newInstance(placeNames.get(position), placeIds[position]), (AppCompatActivity)view.getContext());
-//            }
-//        };
     }
 
     @Override
@@ -133,14 +108,6 @@ public class TripDaysRecyclerAdapter extends RecyclerView.Adapter<TripDaysRecycl
             mClickListener = itemClickListener;
         }
 
-    }
-
-    public void loadFragment(Fragment fragment, AppCompatActivity activity) {
-        // load fragment
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.default_layout, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
     }
 
     // parent activity will implement this method to respond to click events

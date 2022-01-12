@@ -29,6 +29,79 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/MemberCircle1"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="64dp"
+                android:src="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/MemberCircle2"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="40dp"
+                android:src="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/MemberCircle3"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:src="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/MemberChar1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:ellipsize="marquee"
+                android:gravity="center"
+                android:textColor="@color/textMain2"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/MemberCircle1"
+                app:layout_constraintEnd_toEndOf="@+id/MemberCircle1"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/MemberCircle1"
+                app:layout_constraintTop_toTopOf="@+id/MemberCircle1"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/MemberChar2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:textColor="@color/textMain2"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/MemberCircle2"
+                app:layout_constraintEnd_toEndOf="@+id/MemberCircle2"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/MemberCircle2"
+                app:layout_constraintTop_toTopOf="@+id/MemberCircle2"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/MemberChar3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:textColor="@color/textMain2"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/MemberCircle3"
+                app:layout_constraintEnd_toEndOf="@+id/MemberCircle3"
+                app:layout_constraintStart_toStartOf="@+id/MemberCircle3"
+                app:layout_constraintTop_toTopOf="@+id/MemberCircle3" />
+
             <ImageView
                 android:id="@+id/imageView9"
                 android:layout_width="wrap_content"
@@ -41,28 +114,21 @@
 
             <TextView
                 android:id="@+id/tripCityName_field"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:text="@string/loadingDummy_label"
                 android:textColor="@color/textMain2"
                 android:textColorHint="@color/textMain2"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+                app:layout_constraintEnd_toStartOf="@+id/MemberCircle1"
                 app:layout_constraintStart_toEndOf="@+id/imageView9" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/tripUsers_recycle"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginEnd="24dp"
-                app:layout_constraintBottom_toTopOf="@+id/tripDates_field"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tripDates_field"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/loadingDummy_label"
@@ -70,6 +136,7 @@
                 android:textColorHint="@color/black"
                 android:textColorLink="#FFFFFF"
                 android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/MemberCircle1"
                 app:layout_constraintStart_toStartOf="@+id/imageView9"
                 app:layout_constraintTop_toBottomOf="@+id/imageView9" />
 
@@ -87,9 +154,10 @@
 
     <TextView
         android:id="@+id/tripName_field"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/trip_main_label"
         android:textColor="@color/textMain"
         android:textColorHint="@color/black"
@@ -97,15 +165,17 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/trip_scroll"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/imageButton5"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_height="0dp"
         android:background="#00FFFFFF"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:src="@drawable/three_dots_24"
         app:layout_constraintBottom_toTopOf="@+id/trip_scroll"
         app:layout_constraintEnd_toEndOf="parent"

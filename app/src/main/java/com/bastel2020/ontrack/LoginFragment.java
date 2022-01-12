@@ -1,19 +1,17 @@
 package com.bastel2020.ontrack;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import com.google.gson.annotations.SerializedName;
-
-import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
+import androidx.fragment.app.FragmentManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,73 +70,60 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ServerRequester.LoginUser(view.getContext(), signInEmail.getText().toString(), signInPassword.getText().toString());
-//                JSONObject postData = new JSONObject();
-//                try {
-//                    postData.put("Email", signInEmail.getText().toString());
-//                    postData.put("Password", signInPassword.getText().toString());
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                Retrofit retrofit = new Retrofit.Builder()
-//                        .baseUrl(getString(R.string.server_base))
-//                        .addConverterFactory(GsonConverterFactory.create())
-//                        .build();
-//
-//                Server service = retrofit.create(Server.class);
-//                Call<loginResult> call = service.loginUser(new loginRequest(signInEmail.getText().toString(), signInPassword.getText().toString()));
-//                call.enqueue(new Callback<loginResult>()
-//                {
-//                    @Override
-//                    public void onResponse(Call<loginResult> call, Response<loginResult> response)
-//                    {
-//                        if (response.isSuccessful())
-//                        {
-//                            DbContext db = new DbContext(v.getContext());
-//                            db.SaveToken(response.body().token);
-//                            Toast.makeText(v.getContext(), DbContext.GetToken(), Toast.LENGTH_LONG).show();
-//                        }
-//                        else
-//                            {
-//                            Toast.makeText(v.getContext(), getString(R.string.login_wrongData), Toast.LENGTH_LONG);
-//                            }
-//                        return;
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<loginResult> call, Throwable t) { }
-//                });
-//                Toast.makeText(v.getContext(), getString(R.string.login_error), Toast.LENGTH_LONG);
             }
         });
         return  view;
     }
 
-    public class loginResult
+    public static void OnLogged(Context context, ServerRequester.loginResult response)
     {
-        @SerializedName("access_token")
-        public String token;
-        @SerializedName("username")
-        public String username;
-        @SerializedName("lifetime")
-        public int lifetime;
-    }
+        DbContext db = new DbContext(context);
+        db.SaveToken(response.token);
 
-    public class loginRequest
-    {
-        @SerializedName("email")
-        public String email;
-        @SerializedName("password")
-        public String password;
-
-        loginRequest(String mail, String psrd) {
-            email = mail;
-            password = psrd;
+        AppCompatActivity activity = (AppCompatActivity)context;
+        FragmentManager fm = activity.getSupportFragmentManager();
+        int count = fm.getBackStackEntryCount();
+        for(int i = 0; i < count; i++)
+        {
+            fm.popBackStack();
         }
+        ServerRequester.IsValidToken(context);
+
+        Helpers.loadFragment(new MainFragment(), activity.getSupportFragmentManager());
+
+        Toast.makeText(context, "Успешный вход", Toast.LENGTH_LONG).show();
     }
 
-    public interface Server {
-        @POST("auth/signin")
-        Call<loginResult> loginUser(@Body loginRequest data);
+    public static void OnLoginError(Context context)
+    {
+        Toast.makeText(context, context.getText(R.string.login_wrongData), Toast.LENGTH_LONG).show();
     }
+
+//    public class loginResult
+//    {
+//        @SerializedName("access_token")
+//        public String token;
+//        @SerializedName("username")
+//        public String username;
+//        @SerializedName("lifetime")
+//        public int lifetime;
+//    }
+
+//    public class loginRequest
+//    {
+//        @SerializedName("email")
+//        public String email;
+//        @SerializedName("password")
+//        public String password;
+//
+//        loginRequest(String mail, String psrd) {
+//            email = mail;
+//            password = psrd;
+//        }
+//    }
+//
+//    public interface Server {
+//        @POST("auth/signin")
+//        Call<loginResult> loginUser(@Body loginRequest data);
+//    }
 }

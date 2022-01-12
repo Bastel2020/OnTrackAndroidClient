@@ -50,11 +50,9 @@ public class ServerRequester {
             @Override
             public void onResponse(Call<loginResult> call, Response<loginResult> response) {
                 if (response.isSuccessful()) {
-                    DbContext db = new DbContext(context);
-                    db.SaveToken(response.body().token);
-                    Toast.makeText(context, DbContext.GetToken(), Toast.LENGTH_LONG).show();
+                    LoginFragment.OnLogged(context, response.body());
                 } else {
-                    Toast.makeText(context, context.getText(R.string.login_wrongData), Toast.LENGTH_LONG);
+                    LoginFragment.OnLoginError(context);
                 }
             }
 
@@ -83,7 +81,8 @@ public class ServerRequester {
                 if (response.isSuccessful()) {
                     DbContext db = new DbContext(context);
                     db.SaveToken(response.body().token);
-                    Toast.makeText(context, DbContext.GetToken(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Аккаунт успешно создан", Toast.LENGTH_LONG).show();
+                    RegisterFragment.OnAccountCreated(context);
                 } else {
                     Toast.makeText(context, context.getText(R.string.login_wrongData), Toast.LENGTH_LONG);
                 }
@@ -91,9 +90,9 @@ public class ServerRequester {
 
             @Override
             public void onFailure(Call<loginResult> call, Throwable t) {
+                Toast.makeText(context, context.getText(R.string.login_wrongData), Toast.LENGTH_LONG);
             }
         });
-        Toast.makeText(context, context.getText(R.string.login_error), Toast.LENGTH_LONG);
     }
 
     public static boolean IsValidToken(Context context) {
@@ -295,7 +294,7 @@ public class ServerRequester {
         });
     }
 
-    public static void GetTripInfo(Context context, int tripId)
+    public static void GetTripInfo(Context context, int tripId, boolean fromTripMembers)
     {
         DbContext db = new DbContext(context);
         String token = db.GetToken();
@@ -306,7 +305,10 @@ public class ServerRequester {
                 if (response.isSuccessful())
                 {
                     if(response.code() == 200) {
-                        tripsFragment.UpdateEntities(context, response.body());
+                        if(fromTripMembers)
+                            TripMembersFragment.UpdateEntities(context, response.body());
+                        else
+                            tripsFragment.UpdateEntities(context, response.body());
                         Log.i(TAG, "Get trip Info success");
                     }
                     if(response.code() == 204)
@@ -374,6 +376,110 @@ public class ServerRequester {
             @Override
             public void onFailure(Call<TripInfo> call, Throwable t) {
                 Log.e(TAG, "Can't create new Action. Error while sending request: " + t.getMessage() + " " + t.getCause().getMessage());
+            }
+        });
+    }
+
+    public static void CreateTrip(Context context, CreateTrip data)
+    {
+        DbContext db = new DbContext(context);
+        String token = db.GetToken();
+        Call<TripInfo> call = service.CreateTrip(data, "Bearer " + token);
+        call.enqueue(new Callback<TripInfo>() {
+            @Override
+            public void onResponse(Call<TripInfo> call, Response<TripInfo> response) {
+                if (response.isSuccessful())
+                {
+                    Log.i(TAG, "Create new trip success");
+                    CreateTripFragment.OnTripCreated(response.body(), context);
+                }
+                else
+                {
+                    Log.e(TAG, "Can't create new trip. Status code " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TripInfo> call, Throwable t) {
+                Log.e(TAG, "Can't create new trip. Error while sending request: " + t.getMessage() + " " + t.getCause().getMessage());
+            }
+        });
+    }
+
+    public static void JoinToTripByCode(Context context, String code)
+    {
+        DbContext db = new DbContext(context);
+        String token = db.GetToken();
+        Call<TripInfo> call = service.JoinToTripByCode(code, "Bearer " + token);
+        call.enqueue(new Callback<TripInfo>() {
+            @Override
+            public void onResponse(Call<TripInfo> call, Response<TripInfo> response) {
+                if (response.isSuccessful())
+                {
+                    Log.i(TAG, "Join to trip success");
+                    CreateTripFragment.OnTripCreated(response.body(), context);
+                }
+                else
+                {
+                    Log.e(TAG, "Can't join to trip. Status code " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TripInfo> call, Throwable t) {
+                Log.e(TAG, "Can't join to trip. Error while sending request: " + t.getMessage() + " " + t.getCause().getMessage());
+            }
+        });
+    }
+
+    public static void GenerateInviteCode(Context context, int tripId)
+    {
+        DbContext db = new DbContext(context);
+        String token = db.GetToken();
+        Call<TripInfo> call = service.GenerateInviteCode(tripId, "Bearer " + token);
+        call.enqueue(new Callback<TripInfo>() {
+            @Override
+            public void onResponse(Call<TripInfo> call, Response<TripInfo> response) {
+                if (response.isSuccessful())
+                {
+                    Log.i(TAG, "generate trip code success");
+                    TripMembersFragment.UpdateEntities(context, response.body());
+                }
+                else
+                {
+                    Log.e(TAG, "Can't generate trip code. Status code " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TripInfo> call, Throwable t) {
+                Log.e(TAG, "Can't generate trip code. Error while sending request: " + t.getMessage() + " " + t.getCause().getMessage());
+            }
+        });
+    }
+
+    public static void ChangeUserRole(Context context, ChangeUserRole data)
+    {
+        DbContext db = new DbContext(context);
+        String token = db.GetToken();
+        Call<TripInfo> call = service.ChangeUserRole(data,"Bearer " + token);
+        call.enqueue(new Callback<TripInfo>() {
+            @Override
+            public void onResponse(Call<TripInfo> call, Response<TripInfo> response) {
+                if (response.isSuccessful())
+                {
+                    Log.i(TAG, "change user role success");
+                    TripMembersFragment.UpdateEntities(context, response.body());
+                }
+                else
+                {
+                    Log.e(TAG, "Can't change user role. Status code " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TripInfo> call, Throwable t) {
+                Log.e(TAG, "Can't change user role. Error while sending request: " + t.getMessage() + " " + t.getCause().getMessage());
             }
         });
     }
@@ -463,7 +569,7 @@ public class ServerRequester {
         @SerializedName("TripEnd")
         public String TripEnd;
         @SerializedName("Users")
-        public UserInTripShortInfo[] placesCount;
+        public UserInTripInfo[] users;
         @SerializedName("TripDays")
         public TripDayInfo[] TripDays;
         @SerializedName("Polls")
@@ -535,6 +641,19 @@ public class ServerRequester {
         public String AvatarPath;
         @SerializedName("Role")
         public int Role;
+    }
+    public static class UserInTripInfo
+    {
+        @SerializedName("UserId")
+        public int Id;
+        @SerializedName("Username")
+        public String Username;
+        @SerializedName("AvatarPath")
+        public String AvatarPath;
+        @SerializedName("Role")
+        public int Role;
+        @SerializedName("CurrentUser")
+        public boolean isCurrentUser;
     }
 
     public static class PlaceInfo
@@ -639,6 +758,39 @@ public class ServerRequester {
             }
         }
 
+    public static class CreateTrip {
+        @SerializedName("tripDestanation")
+        public int tripDestination;
+        @SerializedName("name")
+        public String name;
+        @SerializedName("startDate")
+        public String startDate;
+        @SerializedName("endDate")
+        public String endDate;
+
+        CreateTrip(int tripDestination, String name, String startDate, String endDate) {
+            this.tripDestination = tripDestination;
+            this.name = name;
+            this.startDate = startDate;
+            this.endDate = endDate;
+        }
+    }
+
+    public static class ChangeUserRole {
+        @SerializedName("tripId")
+        public int tripId;
+        @SerializedName("userToChangeId")
+        public int userToChangeId;
+        @SerializedName("newRoleId")
+        public int newRoleId;
+
+        ChangeUserRole(int tripId, int userToChangeId, int newRoleId) {
+            this.tripId = tripId;
+            this.userToChangeId = userToChangeId;
+            this.newRoleId = newRoleId;
+        }
+    }
+
     public interface Server {
         @POST("auth/signin")
         Call<loginResult> loginUser(@Body loginRequest data);
@@ -666,5 +818,13 @@ public class ServerRequester {
         Call<TripInfo> CreateAction(@Body CreateAction data, @Header("Authorization") String token);
         @POST("trips/EditAction")
         Call<TripInfo> EditAction(@Body EditAction data, @Header("Authorization") String token);
+        @POST("trips/Create")
+        Call<TripInfo> CreateTrip(@Body CreateTrip data, @Header("Authorization") String token);
+        @POST("trips/Join")
+        Call<TripInfo> JoinToTripByCode(@Body String code, @Header("Authorization") String token);
+        @GET("trips/{id}/GenerateInvite")
+        Call<TripInfo> GenerateInviteCode(@Path("id") int tripId, @Header("Authorization") String token);
+        @POST("trips/ChangeRole")
+        Call<TripInfo> ChangeUserRole(@Body ChangeUserRole data, @Header("Authorization") String token);
     }
 }

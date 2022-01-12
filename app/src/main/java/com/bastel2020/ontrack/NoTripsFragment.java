@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment;
  */
 public class NoTripsFragment extends Fragment {
 
-    private static Button createButton;
-    private static TextView enteredCode, joinByCodeButton;
+    private static AppCompatButton createButton, joinByCodeButton;
+    private static TextView enteredCode;
 
     public NoTripsFragment() {
         // Required empty public constructor
@@ -48,6 +48,14 @@ public class NoTripsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Helpers.loadFragment(new CreateTripFragment(), ((AppCompatActivity)v.getContext()).getSupportFragmentManager());
+            }
+        });
+
+        joinByCodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(enteredCode != null && enteredCode.getText() != null && enteredCode.getText().toString() != null && enteredCode.getText().toString() != "")
+                    ServerRequester.JoinToTripByCode(v.getContext(), enteredCode.getText().toString());
             }
         });
 

@@ -1,6 +1,9 @@
 package com.bastel2020.ontrack;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +11,11 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,6 +95,22 @@ public class PlaceFragment extends Fragment {
         placeSite.setText(v.getContext().getString(R.string.placeSite_label) + " " + data.PlaceSite);
         description.setText(data.Description);
 
+        try {
+            if (data.PlaceSite != null) {
+                placeSite.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent browserIntent = new
+                                Intent(Intent.ACTION_VIEW, Uri.parse(data.PlaceSite));
+                        ((AppCompatActivity) v.getContext()).startActivity(browserIntent);
+                    }
+                });
+            }
+            else
+                placeSite.setText(v.getContext().getString(R.string.noPlaceSite_label));
+        }
+        catch(Exception e) {
+            Log.e(TAG, "Can't open Url: " + data.PlaceSite + " Error:" + e.getMessage());}
         progressBar.setVisibility(View.INVISIBLE);
     }
 }

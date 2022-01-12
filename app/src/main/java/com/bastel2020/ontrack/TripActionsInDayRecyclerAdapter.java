@@ -10,8 +10,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -74,7 +72,7 @@ public class TripActionsInDayRecyclerAdapter extends RecyclerView.Adapter<TripAc
                     TextView t = v.findViewById(R.id.tripActionName_label);
                     String s = t.getText().toString();
                     if (!hasFocus && s != null && s.length() > 0)
-                        loadFragment(new EditActionFragment(s, tripDate, tripDayId), (AppCompatActivity)v.getContext());
+                        Helpers.loadFragment(new EditActionFragment(s, tripDate, tripDayId), ((AppCompatActivity)v.getContext()).getSupportFragmentManager());
                     else
                         Toast.makeText(v.getContext(), "Введите название события и нажмите Enter, чтобы перейти в меню подробного редактирования.", Toast.LENGTH_LONG);
                 }
@@ -84,31 +82,9 @@ public class TripActionsInDayRecyclerAdapter extends RecyclerView.Adapter<TripAc
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (hasFocus)
-                        loadFragment(new EditActionFragment(allTripActions[position].Id, tripDate), (AppCompatActivity)v.getContext());
+                        Helpers.loadFragment(new EditActionFragment(allTripActions[position].Id, tripDate), ((AppCompatActivity)v.getContext()).getSupportFragmentManager());
                 }
             });
-        //holder.dayOfWeekLabel.setText(tripDays[position].Id);
-
-//        holder.favoritesButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FavoritesLogic.ChangeFavoritesButtonState(v.getContext(), holder.favoritesButton, placeIds[position], placeNames.get(position), placeAddresses.get(position));
-//            }
-//        });
-
-//        holder.placePictureBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                loadFragment(PlaceFragment.newInstance(placeNames.get(position), placeIds[position]), (AppCompatActivity)v.getContext());
-//            }
-//        });
-
-//        mClickListener = new TripDaysRecyclerAdapter.ItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                loadFragment(PlaceFragment.newInstance(placeNames.get(position), placeIds[position]), (AppCompatActivity)view.getContext());
-//            }
-//        };
     }
 
     @Override
@@ -141,14 +117,6 @@ public class TripActionsInDayRecyclerAdapter extends RecyclerView.Adapter<TripAc
             mClickListener = itemClickListener;
         }
 
-    }
-
-    public void loadFragment(Fragment fragment, AppCompatActivity activity) {
-        // load fragment
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.default_layout, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
     }
 
     // parent activity will implement this method to respond to click events

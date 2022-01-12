@@ -11,7 +11,7 @@
     <string name="loginButton_label">Войти</string>
     <string name="searchPlace_tip">Найти место для путешествия</string>
     <string name="main_bottomMenu">Главная</string>
-    <string name="trip_bottomMenu">Поездки</string>
+    <string name="trip_bottomMenu">Поездка</string>
     <string name="favorites_bottomMenu">Избранное</string>
     <string name="profile_bottomMenu">Профиль</string>
     <string name="main_upperTest">Создавайте поездки, делитесь ими с друзьями и присоединяйтесь по коду доступа!</string>
@@ -45,7 +45,8 @@
     <string name="workingHours_label">Режим работы:</string>
     <string name="enterCost_label">Вход:</string>
     <string name="addToTrip_button">Добавить в поездку</string>
-    <string name="placeSite_label">Сайт места:</string>
+    <string name="placeSite_label">Сайт:</string>
+    <string name="noPlaceSite_label">Сайт: отсутствует</string>
     <string name="favorites">Избранное</string>
     <string name="profile">Профиль</string>
     <string name="myTrips_profile_label">Мои поездки</string>
@@ -71,6 +72,7 @@
     <string name="EnterCode_hint">Введите код доступа</string>
     <string name="CreateTripStartDate_label">Дата начала поездки</string>
     <string name="CreateTripEndDate_label">Дата конца поездки</string>
+    <string name="copiedToClipboard_toast">Код скопирован в буфер обмена</string>
 
     <string name="hello_blank_fragment">Страница пока не реализована</string>
 </resources>

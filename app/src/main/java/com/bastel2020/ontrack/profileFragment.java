@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +32,7 @@ public class profileFragment extends Fragment {
     private static ScrollView scroll;
     private static ProgressBar progressBar;
     private static Fragment activeTripsFragment;
+    private static ImageButton logOut;
 
     public profileFragment() {
         // Required empty public constructor
@@ -59,9 +62,9 @@ public class profileFragment extends Fragment {
         name = v.findViewById(R.id.nameInProfile_field);
         email = v.findViewById(R.id.emailInProfile_field);
         activeTripsFragment = new activeTripsInProfileFragment();
+        logOut = v.findViewById(R.id.logOut_button);
 
-        FragmentManager fm = ((AppCompatActivity)v.getContext()).getSupportFragmentManager();
-        ViewStateAdapter sa = new ViewStateAdapter(fm, getLifecycle());
+        ViewStateAdapter sa = new ViewStateAdapter(getChildFragmentManager(), getLifecycle());
         final ViewPager2 pa = v.findViewById(R.id.profile_pagger);
         pa.setAdapter(sa);
 
@@ -103,6 +106,26 @@ public class profileFragment extends Fragment {
         name.setText(data.Username);
         email.setText(data.Email);
         activeTripsFragment = new activeTripsInProfileFragment(context, data.UserTrips);
+
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Выход из системы...", Toast.LENGTH_SHORT).show();
+
+                DbContext.DeleteToken();
+
+                ServerRequester.IsValidToken(v.getContext());
+
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                FragmentManager fm = activity.getSupportFragmentManager();
+                int count = fm.getBackStackEntryCount();
+                for(int i = 0; i < count; i++)
+                {
+                    fm.popBackStack();
+                }
+                Helpers.loadFragment(new MainFragment(), activity.getSupportFragmentManager());
+            }
+        });
 
         scroll.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
